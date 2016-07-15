@@ -1,0 +1,2 @@
+c:\users\emixam23\documents\visual studio 2015\Projects\MapTileProject\MapTileProject\MapTileProject.UWP\MapTileProject.UWP.csproj;x86
+c:\users\emixam23\documents\visual studio 2015\Projects\MapTileProject\MapTileProject\MapTileProject\MapTileProject.csproj;neutral
