@@ -1,20 +1,19 @@
-using Android.Gms.Maps;
-using Android.Gms.Maps.Model;
+using Foundation;
+using MapKit;
 using MapTileProject.CustomControls;
-using MapTileProject.Droid.CustomRenderer;
-using System;
+using MapTileProject.iOS.CustomRenderer;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps.Android;
-using Xamarin.Forms.Platform.Android;
+using Xamarin.Forms.Maps.iOS;
+using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
-namespace MapTileProject.Droid.CustomRenderer
+namespace MapTileProject.iOS.CustomRenderer
 {
     /// <summary>
     /// CustomRenderer for the CustomMap created in the PCL part.
     /// This Renderer gives us the possibility to add/override some functionalities.
     /// </summary>
-    public class CustomMapRenderer : MapRenderer, IOnMapReadyCallback
+    public class CustomMapRenderer : MapRenderer
     {
         /// <summary>
         /// Instance of our Custom control declared in the PCL part.
@@ -23,7 +22,7 @@ namespace MapTileProject.Droid.CustomRenderer
         /// <summary>
         /// Instance of the native map for this plateform.
         /// </summary>
-        GoogleMap nativeMap;
+        MKMapView nativeMap;
 
         /// <summary>
         /// We override the OnElementChanged() event handler to get the desired instance. We also use it for updates.
@@ -35,13 +34,16 @@ namespace MapTileProject.Droid.CustomRenderer
 
             if (e.OldElement != null)
             {
-                // Unsubscribe
+
             }
 
             if (e.NewElement != null)
             {
                 customMap = e.NewElement as CustomMap;
-                ((MapView)Control).GetMapAsync(this);
+                nativeMap = Control as MKMapView;
+                nativeMap.OverlayRenderer = null;
+
+                UpdateTiles();
             }
         }
 
@@ -50,44 +52,43 @@ namespace MapTileProject.Droid.CustomRenderer
         /// </summary>
         private void UpdateTiles()
         {
+            var tileOverlay = new MKTileOverlay(customMap.MapTileTemplate);
+
             if (nativeMap != null)
             {
-                var tileProvider = new CustomTileProvider(512, 512, customMap.MapTileTemplate);
-                var options = new TileOverlayOptions().InvokeTileProvider(tileProvider);
-                nativeMap.AddTileOverlay(options);
-            }
-        }
+                nativeMap.OverlayRenderer = (MKMapView mapView, IMKOverlay overlay) =>
+                {
+                    var _tileOverlay = overlay as MKTileOverlay;
 
-        /// <summary>
-        /// This function only takes place on Android plateform. This function is the native callback called when the map is loaded.
-        /// </summary>
-        /// <param name="googleMap"></param>
-        public void OnMapReady(GoogleMap googleMap)
-        {
-            this.nativeMap = googleMap;
-            googleMap.UiSettings.ZoomControlsEnabled = false;
-            
-            UpdateTiles();
+                    if (_tileOverlay != null)
+                    {
+                        return new MKTileOverlayRenderer(_tileOverlay);
+                    }
+
+                    return new MKOverlayRenderer(overlay);
+                };
+            }
+            nativeMap.AddOverlay(tileOverlay);
         }
 
         /// <summary>
         /// This class converts the basic url template value (x, y, z) into real values.
         /// </summary>
-        public class CustomTileProvider : UrlTileProvider
+        public class CustomTileOverlay : MKTileOverlay
         {
             private string urlTemplate;
 
-            public CustomTileProvider(int x, int y, string urlTemplate)
-            : base(x, y)
+            public override void LoadTileAtPath(MKTileOverlayPath path, MKTileOverlayLoadTileCompletionHandler result)
             {
-                this.urlTemplate = urlTemplate;
+                base.LoadTileAtPath(path, result);
             }
 
-            public override Java.Net.URL GetTileUrl(int x, int y, int z)
+            public override NSUrl URLForTilePath(MKTileOverlayPath path)
             {
-                var url = urlTemplate.Replace("{z}", z.ToString()).Replace("{x}", x.ToString()).Replace("{y}", y.ToString());
-                Console.WriteLine(url);
-                return new Java.Net.URL(url);
+                //Here we write the code for creating the url.
+                var url = urlTemplate.Replace("{z}", path.Z.ToString()).Replace("{x}", path.X.ToString()).Replace("{y}", path.Y.ToString());
+
+                return new NSUrl(url);
             }
         }
     }
