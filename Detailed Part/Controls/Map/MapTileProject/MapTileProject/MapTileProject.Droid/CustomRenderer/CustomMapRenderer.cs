@@ -1,6 +1,6 @@
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
-using MapTileProject.CustomControls;
+using MapTileProject.CustomControl;
 using MapTileProject.Droid.CustomRenderer;
 using System;
 using Xamarin.Forms;

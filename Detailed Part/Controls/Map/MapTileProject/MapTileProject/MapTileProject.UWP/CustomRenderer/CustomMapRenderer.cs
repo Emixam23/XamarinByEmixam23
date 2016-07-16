@@ -1,4 +1,4 @@
-﻿using MapTileProject.CustomControls;
+﻿using MapTileProject.CustomControl;
 using MapTileProject.UWP.CustomRenderer;
 using System;
 using System.Diagnostics;

@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms.Maps;
 
-namespace MapTileProject.CustomControls
+namespace MapTileProject.CustomControl
 {
     /// <summary>
     /// CustomMap inherits from Map, which give us the same behavior of a basic Xamarin.Forms.Map with the possibility of add some functionalities.
