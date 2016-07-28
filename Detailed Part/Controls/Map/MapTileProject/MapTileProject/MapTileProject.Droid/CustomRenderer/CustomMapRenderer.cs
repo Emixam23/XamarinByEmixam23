@@ -59,6 +59,9 @@ namespace MapTileProject.Droid.CustomRenderer
                 UpdateTiles();
         }
 
+        /// <summary>
+        /// Tile overlay instance
+        /// </summary>
         private TileOverlay tileOverlay;
         /// <summary>
         /// This function update the tiles of the Map for this plateform.
@@ -82,10 +85,6 @@ namespace MapTileProject.Droid.CustomRenderer
                             .InvokeTileProvider(
                                 new CustomTileProvider(512, 512, customMap.MapTileTemplate))
                             .InvokeZIndex(-1));
-
-                    /*var tileProvider = new CustomTileProvider(512, 512, customMap.MapTileTemplate);
-                    var options = new TileOverlayOptions().InvokeTileProvider(tileProvider);
-                    nativeMap.AddTileOverlay(options);*/
                 }
             }
         }
