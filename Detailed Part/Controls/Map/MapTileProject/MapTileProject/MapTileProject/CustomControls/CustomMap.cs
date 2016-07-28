@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.Maps;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace MapTileProject.CustomControls
 {
@@ -8,8 +9,18 @@ namespace MapTileProject.CustomControls
     public class CustomMap : Map
     {
         /// <summary>
-        /// This string contains the URL of your design template for the tiles of the CustomMap
+        /// This string contains the URL of your design template for the tiles of the CustomMap.
         /// </summary>
-        public string MapTileTemplate { get; set; }
+        public static readonly BindableProperty MapTileTemplateProperty = 
+            BindableProperty.Create(nameof(MapTileTemplate), typeof(string), typeof(CustomMap), null);
+
+        /// <summary>
+        /// Assessor for MapTileTemplate property.
+        /// </summary>
+        public string MapTileTemplate
+        {
+            get { return (string)GetValue(MapTileTemplateProperty); }
+            set { SetValue(MapTileTemplateProperty, value); }
+        }
     }
 }

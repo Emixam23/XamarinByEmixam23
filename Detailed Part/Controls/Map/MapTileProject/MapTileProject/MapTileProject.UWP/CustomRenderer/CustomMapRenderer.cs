@@ -1,7 +1,7 @@
 ﻿using MapTileProject.CustomControls;
 using MapTileProject.UWP.CustomRenderer;
 using System;
-using System.Diagnostics;
+using System.ComponentModel;
 using Windows.UI.Xaml.Controls.Maps;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.UWP;
@@ -43,16 +43,38 @@ namespace MapTileProject.UWP.CustomRenderer
         }
 
         /// <summary>
+        /// The on element property changed callback.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/>Instance containing the event data.</param>
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == CustomMap.MapTileTemplateProperty.PropertyName)
+                UpdateTiles();
+        }
+
+        /// <summary>
         /// This function update the tiles of the Map for this plateform.
         /// </summary>
         private void UpdateTiles()
         {
             if (nativeMap != null)
             {
-                HttpMapTileDataSource dataSource = new HttpMapTileDataSource();
-                dataSource.UriRequested += DataSource_UriRequested;
-                MapTileSource tileSource = new MapTileSource(dataSource);
-                nativeMap.TileSources.Add(tileSource);
+                if (this.customMap.MapTileTemplate != null)
+                {
+                    if (nativeMap.TileSources.Count > 0)
+                    {
+                        nativeMap.TileSources.Clear();
+                        this.nativeMap.Style = MapStyle.Road;
+                    }
+
+                    this.nativeMap.Style = MapStyle.None;
+                    HttpMapTileDataSource dataSource = new HttpMapTileDataSource();
+                    dataSource.UriRequested += DataSource_UriRequested;
+                    nativeMap.TileSources.Add(new MapTileSource(dataSource));
+                }
             }
         }
 

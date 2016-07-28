@@ -2,6 +2,7 @@ using Foundation;
 using MapKit;
 using MapTileProject.CustomControls;
 using MapTileProject.iOS.CustomRenderer;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
@@ -48,6 +49,20 @@ namespace MapTileProject.iOS.CustomRenderer
         }
 
         /// <summary>
+        /// The on element property changed callback.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/>Instance containing the event data.</param>
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == CustomMap.MapTileTemplateProperty.PropertyName)
+                UpdateTiles();
+        }
+
+        private MKTileOverlay tileOverlay;
+        /// <summary>
         /// This function update the tiles of the Map for this plateform.
         /// </summary>
         private void UpdateTiles()
@@ -56,17 +71,26 @@ namespace MapTileProject.iOS.CustomRenderer
 
             if (nativeMap != null)
             {
-                nativeMap.OverlayRenderer = (MKMapView mapView, IMKOverlay overlay) =>
+                if (this.customMap.MapTileTemplate != null)
                 {
-                    var _tileOverlay = overlay as MKTileOverlay;
-
-                    if (_tileOverlay != null)
+                    if (this.tileOverlay != null)
                     {
-                        return new MKTileOverlayRenderer(_tileOverlay);
+                        this.nativeMap.RemoveOverlay(this.tileOverlay);
+                        this.tileOverlay = null;
                     }
 
-                    return new MKOverlayRenderer(overlay);
-                };
+                    nativeMap.OverlayRenderer = (MKMapView mapView, IMKOverlay overlay) =>
+                    {
+                        var _tileOverlay = overlay as MKTileOverlay;
+    
+                        if (_tileOverlay != null)
+                        {
+                            return new MKTileOverlayRenderer(_tileOverlay);
+                        }
+
+                        return new MKOverlayRenderer(overlay);
+                    };
+                }
             }
             nativeMap.AddOverlay(tileOverlay);
         }
