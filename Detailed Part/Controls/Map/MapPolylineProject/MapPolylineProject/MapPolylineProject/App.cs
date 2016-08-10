@@ -9,7 +9,7 @@ namespace MapPolylineProject
 {
     public class App : Application
     {
-        public static readonly string GOOGLE_MAP_API_KEY = "AIzaSyA44Syg9rLuV4smtobEhBm-TwkBlNpf2Sg";
+        public static readonly string GOOGLE_MAP_API_KEY = "Your Key";
 
         public App()
         {
