@@ -1,6 +1,6 @@
 using Foundation;
 using MapKit;
-using MapTileProject.CustomControls;
+using MapTileProject.CustomControl;
 using MapTileProject.iOS.CustomRenderer;
 using System.ComponentModel;
 using Xamarin.Forms;

@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="CustomControls\CustomMap.cs" />
+    <Compile Include="CustomControl\CustomMap.cs" />
     <Compile Include="MapTilePage.xaml.cs">
       <DependentUpon>MapTilePage.xaml</DependentUpon>
     </Compile>

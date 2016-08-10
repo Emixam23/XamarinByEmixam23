@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MapTileProject.CustomControls;assembly=MapTileProject"
+             xmlns:local="clr-namespace:MapTileProject.CustomControl;assembly=MapTileProject"
              x:Class="MapTileProject.MapTilePage">
   
   <ContentPage.Content>
@@ -13,7 +13,7 @@
     -The clr-namespace attribute is the namespace of your Custom object (PCL part).
     -Generally, the assembly is the name of your project.
     -->
-    <local:CustomMap MapTileTemplate="https://api.mapbox.com/styles/v1/raphaelk7/ciovncoj30054danibdopgdjo/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFwaGFlbGs3IiwiYSI6ImNpb2ZyMHN2eDAwNTN3NGo3amFqdnFxN2kifQ.mGStWtvbSf9svNzJ0csspA"
+    <local:CustomMap MapTileTemplate="https://api.mapbox.com/styles/........./tiles/256/{z}/{x}/{y}?access_token=......"
                      VerticalOptions="Fill" HorizontalOptions="Fill"/>
     
   </ContentPage.Content>
