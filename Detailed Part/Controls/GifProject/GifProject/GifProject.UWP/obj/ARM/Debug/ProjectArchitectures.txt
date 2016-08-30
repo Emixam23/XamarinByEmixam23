@@ -1,0 +1,2 @@
+C:\XamarinByEmixam23\Detailed Part\Controls\GifProject\GifProject\GifProject.UWP\GifProject.UWP.csproj;arm
+C:\XamarinByEmixam23\Detailed Part\Controls\GifProject\GifProject\GifProject\GifProject.csproj;neutral
