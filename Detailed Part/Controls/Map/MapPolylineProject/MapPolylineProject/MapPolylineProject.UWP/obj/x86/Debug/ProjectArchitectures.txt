@@ -1,2 +1,0 @@
-C:\XamarinByEmixam23\Detailed Part\Controls\Map\MapPolylineProject\MapPolylineProject\MapPolylineProject.UWP\MapPolylineProject.UWP.csproj;x86
-C:\XamarinByEmixam23\Detailed Part\Controls\Map\MapPolylineProject\MapPolylineProject\MapPolylineProject\MapPolylineProject.csproj;neutral
