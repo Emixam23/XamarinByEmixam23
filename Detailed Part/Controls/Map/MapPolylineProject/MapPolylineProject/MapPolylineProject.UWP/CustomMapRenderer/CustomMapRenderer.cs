@@ -1,8 +1,10 @@
 ﻿using MapPolylineProject.CustomControl;
 using NightLine.UWP.CustomRenderers;
+using System;
 using System.Collections.Generic;
 using Windows.Devices.Geolocation;
 using Windows.UI.Xaml.Controls.Maps;
+using Windows.UI;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.UWP;
 using Xamarin.Forms.Platform.UWP;
@@ -18,11 +20,6 @@ namespace NightLine.UWP.CustomRenderers
         protected override void OnElementChanged(ElementChangedEventArgs<Map> e)
         {
             base.OnElementChanged(e);
-
-            if (e.OldElement != null)
-            {
-                nativeMap = Control as MapControl;
-            }
 
             if (e.NewElement != null)
             {
@@ -57,7 +54,11 @@ namespace NightLine.UWP.CustomRenderers
 
                 Geopath path = new Geopath(coordinates);
                 MapPolyline polyline = new MapPolyline();
-                polyline.StrokeColor = Windows.UI.Color.FromArgb(128, 255, 0, 0);
+                polyline.StrokeColor = Color.FromArgb(
+                    Convert.ToByte(formsMap.PolylineColor.A),
+                    Convert.ToByte(formsMap.PolylineColor.R),
+                    Convert.ToByte(formsMap.PolylineColor.G),
+                    Convert.ToByte(formsMap.PolylineColor.B));
                 polyline.StrokeThickness = 5;
                 polyline.Path = path;
                 nativeMap.MapElements.Add(polyline);

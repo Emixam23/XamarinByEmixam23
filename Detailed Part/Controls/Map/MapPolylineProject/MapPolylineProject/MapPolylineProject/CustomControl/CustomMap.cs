@@ -13,31 +13,27 @@ namespace MapPolylineProject.CustomControl
     public class CustomMap : Map
     {
         public static readonly BindableProperty PolylineAddressPointsProperty =
-            BindableProperty.Create(nameof(PolylineAddressPoints), typeof(List<string>), typeof(CustomMap), new List<string>(), BindingMode.TwoWay);
+            BindableProperty.Create(nameof(PolylineAddressPoints), typeof(List<string>), typeof(CustomMap), null);
         public List<string> PolylineAddressPoints
         {
             get { return (List<string>)GetValue(PolylineAddressPointsProperty); }
             set
             {
                 SetValue(PolylineAddressPointsProperty, value);
-
-                if (PolylineAutoUpdate)
-                {
-                    generatePolylineCoordinates(value);
-                }
-                else
-                {
-                    Debug.WriteLine("PolylineAutoUpdate is false");
-                }
+                this.GeneratePolylineCoordinatesInner();
             }
         }
 
         public static readonly BindableProperty PolylineCoordinatesProperty =
-            BindableProperty.Create(nameof(PolylineCoordinates), typeof(List<GeoPosition>), typeof(CustomMap), new List<GeoPosition>(), BindingMode.TwoWay);
+            BindableProperty.Create(nameof(PolylineCoordinates), typeof(List<GeoPosition>), typeof(CustomMap), null);
         public List<GeoPosition> PolylineCoordinates
         {
             get { return (List<GeoPosition>)GetValue(PolylineCoordinatesProperty); }
-            set { SetValue(PolylineCoordinatesProperty, value); }
+            set
+            {
+                Debug.WriteLine("edit");
+                SetValue(PolylineCoordinatesProperty, value);
+            }
         }
 
         public static readonly BindableProperty PolylineColorProperty =
@@ -78,14 +74,20 @@ namespace MapPolylineProject.CustomControl
         #endregion
 
         #region Generation methods
-        private async void generatePolylineCoordinates(List<string> value)
+        public async void GeneratePolylineCoordinatesInner()
         {
-            this.PolylineCoordinates = await GeneratePolylineCoordinates(value);
+            if (this.PolylineAddressPoints != null)
+            {
+                Debug.WriteLine("Debug is working also here!");
+                this.PolylineCoordinates = await GeneratePolylineCoordinates(this.PolylineAddressPoints);
+            }
         }
         public static async Task<List<GeoPosition>> GeneratePolylineCoordinates(List<string> AddressPoints)
         {
+            Debug.WriteLine("GeneratePolylineCoordinates => 1");
             if (AddressPoints.Count > 1)
             {
+                Debug.WriteLine("GeneratePolylineCoordinates => 2");
                 List<GeoPosition> GeoPositionList = new List<GeoPosition>();
                 List<JObject> DirectionResponseList = new List<JObject>();
                 string addr_tmp = null;
@@ -95,12 +97,16 @@ namespace MapPolylineProject.CustomControl
                     if (addr_tmp == null)
                     {
                         addr_tmp = item;
+                        Debug.WriteLine("GeneratePolylineCoordinates => addr_tmp = item => " + item);
                     }
                     else
                     {
+                        Debug.WriteLine("GeneratePolylineCoordinates => else => [{0}/{1}]", addr_tmp, item);
                         JObject response = await GetDirectionFromGoogleAPI(addr_tmp, item);
+                        Debug.WriteLine("Response got !");
                         if (response != null)
                         {
+                            Debug.WriteLine("response != null");
                             DirectionResponseList.Add(response);
                         }
                         addr_tmp = item;
@@ -111,6 +117,7 @@ namespace MapPolylineProject.CustomControl
                     bool finished = false;
                     int index = 0;
 
+                    Debug.WriteLine("GeneratePolylineCoordinates => 2");
                     while (!finished)
                     {
                         try
@@ -123,6 +130,12 @@ namespace MapPolylineProject.CustomControl
                             finished = true;
                         }
                     }
+                }
+                int a = 0;
+                foreach (GeoPosition gp in GeoPositionList)
+                {
+                    Debug.WriteLine("[{0}]GeoPosition = {1}/{2}", a, gp.Latitude, gp.Longitude);
+                    a++;
                 }
                 return (GeoPositionList);
             }
@@ -138,24 +151,44 @@ namespace MapPolylineProject.CustomControl
             + "&destination=" + destination
             + "&key=" + App.GOOGLE_MAP_API_KEY;
 
+            Debug.WriteLine("Test 1");
             try
             {
                 var client = new HttpClient();
+                Debug.WriteLine("Test 2");
                 client.BaseAddress = new Uri(url);
+                Debug.WriteLine("Test 3");
 
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(aditionnal_URL, content);
-
-                // this result string should be something like: "{"token":"rgh2ghgdsfds"}"
+                Debug.WriteLine("Test 4");
+                HttpResponseMessage response = null;
+                try
+                {
+                    Debug.WriteLine("Test 4.1");
+                    response = await client.PostAsync(aditionnal_URL, content);
+                    Debug.WriteLine("Test 4.2");
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.WriteLine("NullReferenceException is thrown ! " + e.ToString());
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Something is thrown ! " + e.ToString());
+                }
+                Debug.WriteLine("Test 5");
                 string result = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Test 6");
                 if (result != null)
                 {
                     try
                     {
+                        Debug.WriteLine("Test 7");
                         return JObject.Parse(result);
                     }
                     catch (Exception e)
                     {
+                        Debug.WriteLine("Test 7.1");
                         Debug.WriteLine(e.ToString());
                         return null;
                     }
@@ -168,6 +201,7 @@ namespace MapPolylineProject.CustomControl
             }
             catch (Exception e)
             {
+                Debug.WriteLine("Test 8");
                 Debug.WriteLine(e.ToString());
                 return null;
             }

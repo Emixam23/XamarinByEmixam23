@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using MapPolylineProject.Page;
 using Xamarin.Forms;
 
 namespace MapPolylineProject
 {
     public class App : Application
     {
-        public static readonly string GOOGLE_MAP_API_KEY = "Your Key";
+        public static readonly string GOOGLE_MAP_API_KEY = "AIzaSyA44Syg9rLuV4smtobEhBm-TwkBlNpf2Sg";
 
         public App()
         {
             // The root page of your application
-            MainPage = new MapPolylinePage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
