@@ -26,14 +26,6 @@ namespace MapPolylineProject.Page
             InitializeComponent();
 
             MapTest.PolylineAddressPoints = AddressPointList;
-
-            //test();
-        }
-
-        private async void test()
-        {
-            List<GeoPosition> list = await GeneratePolylineCoordinates(AddressPointList);
-            MapTest.PolylineCoordinates = list;
         }
     }
 }

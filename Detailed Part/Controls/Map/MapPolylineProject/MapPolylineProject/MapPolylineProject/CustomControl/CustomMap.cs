@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
@@ -10,7 +11,7 @@ using Xamarin.Forms.Maps;
 
 namespace MapPolylineProject.CustomControl
 {
-    public class CustomMap : Map
+    public class CustomMap : Map, INotifyPropertyChanged
     {
         public static readonly BindableProperty PolylineAddressPointsProperty =
             BindableProperty.Create(nameof(PolylineAddressPoints), typeof(List<string>), typeof(CustomMap), null);
@@ -29,27 +30,56 @@ namespace MapPolylineProject.CustomControl
         public List<GeoPosition> PolylineCoordinates
         {
             get { return (List<GeoPosition>)GetValue(PolylineCoordinatesProperty); }
-            set
-            {
-                Debug.WriteLine("edit");
-                SetValue(PolylineCoordinatesProperty, value);
-            }
+            set { SetValue(PolylineCoordinatesProperty, value); }
+        }
+
+        public static readonly BindableProperty PolylineAutoUpdateProperty =
+            BindableProperty.Create(nameof(PolylineAutoUpdate), typeof(bool), typeof(CustomMap), true);
+        public bool PolylineAutoUpdate
+        {
+            get { return (bool)GetValue(PolylineAutoUpdateProperty); }
+            set { SetValue(PolylineAutoUpdateProperty, value); }
         }
 
         public static readonly BindableProperty PolylineColorProperty =
-            BindableProperty.Create(nameof(PolylineColor), typeof(Color), typeof(CustomMap), Color.Red, BindingMode.TwoWay);
+            BindableProperty.Create(nameof(PolylineColor), typeof(Color), typeof(CustomMap), Color.Red);
         public Color PolylineColor
         {
             get { return (Color)GetValue(PolylineColorProperty); }
             set { SetValue(PolylineColorProperty, value); }
         }
 
-        public static readonly BindableProperty PolylineWidthProperty =
-            BindableProperty.Create(nameof(PolylineWidth), typeof(int), typeof(CustomMap), 5, BindingMode.TwoWay);
-        public int PolylineWidth
+        public static readonly BindableProperty PolylineThicknessProperty =
+            BindableProperty.Create(nameof(PolylineThickness), typeof(double), typeof(CustomMap), 5.0);
+        public double PolylineThickness
         {
-            get { return (int)GetValue(PolylineWidthProperty); }
-            set { SetValue(PolylineWidthProperty, value); }
+            get { return (double)GetValue(PolylineThicknessProperty); }
+            set { SetValue(PolylineThicknessProperty, value); }
+        }
+
+        /// <summary>
+        /// WORK IN PROGRESS
+        /// </summary>
+        /*public enum CameraFocusReference
+        {
+            None,
+            OnCurrentPosition,
+            OnPolyline
+        }
+        public static readonly BindableProperty CameraFocusProperty =
+            BindableProperty.Create(nameof(CameraFocus), typeof(CameraFocusReference), typeof(CustomMap), CameraFocusReference.None);
+        public CameraFocusReference CameraFocus
+        {
+            get { return (CameraFocusReference)GetValue(CameraFocusProperty); }
+            set { SetValue(CameraFocusProperty, value); }
+        }*/
+
+        public static readonly BindableProperty IsUIButtonVisibleProperty =
+            BindableProperty.Create(nameof(IsUIButtonVisible), typeof(bool), typeof(CustomMap), true);
+        public bool IsUIButtonVisible
+        {
+            get { return (bool)GetValue(IsUIButtonVisibleProperty); }
+            set { SetValue(IsUIButtonVisibleProperty, value); }
         }
 
         #region Additional resources
@@ -70,24 +100,28 @@ namespace MapPolylineProject.CustomControl
             public double Latitude { get; set; }
             public double Longitude { get; set; }
         }
-        public bool PolylineAutoUpdate { get; set; }
         #endregion
 
         #region Generation methods
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public async void GeneratePolylineCoordinatesInner()
         {
             if (this.PolylineAddressPoints != null)
             {
-                Debug.WriteLine("Debug is working also here!");
                 this.PolylineCoordinates = await GeneratePolylineCoordinates(this.PolylineAddressPoints);
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this,
+                        new PropertyChangedEventArgs(nameof(PolylineCoordinatesProperty)));
+                }
             }
         }
+
         public static async Task<List<GeoPosition>> GeneratePolylineCoordinates(List<string> AddressPoints)
         {
-            Debug.WriteLine("GeneratePolylineCoordinates => 1");
             if (AddressPoints.Count > 1)
             {
-                Debug.WriteLine("GeneratePolylineCoordinates => 2");
                 List<GeoPosition> GeoPositionList = new List<GeoPosition>();
                 List<JObject> DirectionResponseList = new List<JObject>();
                 string addr_tmp = null;
@@ -97,16 +131,12 @@ namespace MapPolylineProject.CustomControl
                     if (addr_tmp == null)
                     {
                         addr_tmp = item;
-                        Debug.WriteLine("GeneratePolylineCoordinates => addr_tmp = item => " + item);
                     }
                     else
                     {
-                        Debug.WriteLine("GeneratePolylineCoordinates => else => [{0}/{1}]", addr_tmp, item);
                         JObject response = await GetDirectionFromGoogleAPI(addr_tmp, item);
-                        Debug.WriteLine("Response got !");
                         if (response != null)
                         {
-                            Debug.WriteLine("response != null");
                             DirectionResponseList.Add(response);
                         }
                         addr_tmp = item;
@@ -117,7 +147,6 @@ namespace MapPolylineProject.CustomControl
                     bool finished = false;
                     int index = 0;
 
-                    Debug.WriteLine("GeneratePolylineCoordinates => 2");
                     while (!finished)
                     {
                         try
@@ -134,7 +163,6 @@ namespace MapPolylineProject.CustomControl
                 int a = 0;
                 foreach (GeoPosition gp in GeoPositionList)
                 {
-                    Debug.WriteLine("[{0}]GeoPosition = {1}/{2}", a, gp.Latitude, gp.Longitude);
                     a++;
                 }
                 return (GeoPositionList);
@@ -151,22 +179,16 @@ namespace MapPolylineProject.CustomControl
             + "&destination=" + destination
             + "&key=" + App.GOOGLE_MAP_API_KEY;
 
-            Debug.WriteLine("Test 1");
             try
             {
                 var client = new HttpClient();
-                Debug.WriteLine("Test 2");
                 client.BaseAddress = new Uri(url);
-                Debug.WriteLine("Test 3");
 
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
-                Debug.WriteLine("Test 4");
                 HttpResponseMessage response = null;
                 try
                 {
-                    Debug.WriteLine("Test 4.1");
                     response = await client.PostAsync(aditionnal_URL, content);
-                    Debug.WriteLine("Test 4.2");
                 }
                 catch (NullReferenceException e)
                 {
@@ -176,32 +198,26 @@ namespace MapPolylineProject.CustomControl
                 {
                     Debug.WriteLine("Something is thrown ! " + e.ToString());
                 }
-                Debug.WriteLine("Test 5");
                 string result = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine("Test 6");
                 if (result != null)
                 {
                     try
                     {
-                        Debug.WriteLine("Test 7");
                         return JObject.Parse(result);
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine("Test 7.1");
                         Debug.WriteLine(e.ToString());
                         return null;
                     }
                 }
                 else
                 {
-                    Debug.WriteLine("result == null");
                     return null;
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Test 8");
                 Debug.WriteLine(e.ToString());
                 return null;
             }
