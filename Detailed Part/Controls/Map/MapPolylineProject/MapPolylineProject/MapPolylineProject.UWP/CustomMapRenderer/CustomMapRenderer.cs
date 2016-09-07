@@ -67,7 +67,9 @@ namespace NightLine.UWP.CustomRenderers
                     polyline.Path = path;
                     nativeMap.MapElements.Add(polyline);
                     nativeMap.UpdateLayout();
-                    customMap.MoveToRegion();
+                    
+                    //WORK IN PROGRESS
+                    //customMap.MoveToRegion();
                 }
             }
 

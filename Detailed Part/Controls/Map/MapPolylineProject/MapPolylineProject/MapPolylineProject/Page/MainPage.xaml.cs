@@ -25,7 +25,7 @@ namespace MapPolylineProject.Page
 
             InitializeComponent();
 
-            MapTest.PolylineAddressPoints = AddressPointList;
+            //MapTest.PolylineAddressPoints = AddressPointList;
         }
     }
 }
