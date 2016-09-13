@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:control="clr-namespace:ShapeDrawingProject.CustomControl;assembly=ShapeDrawingProject"
+             x:Class="ShapeDrawingProject.Page.MainPage">
+
+  <ContentPage.Content>
+    <AbsoluteLayout BackgroundColor="White">
+      <control:CustomShapeDrawing BackgroundColor="Transparent" BorderColor="Red" ShapeColor="White"
+                                  PointsShapeCoordinate="0.5/0.1, 1/0.4, 0.75/0.75, 0.25/0.75, 0/0.4"
+                                  AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.5, 0.5"
+                                  AbsoluteLayout.LayoutFlags="All"/>
+    </AbsoluteLayout>
+  </ContentPage.Content>
+
+</ContentPage>
