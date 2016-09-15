@@ -1,8 +1,5 @@
-﻿using MapPolylineProject.CustomControl;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using Xamarin.Forms;
-using static MapPolylineProject.CustomControl.CustomMap;
 
 namespace MapPolylineProject.Page
 {
@@ -12,7 +9,7 @@ namespace MapPolylineProject.Page
 
         public MainPage()
         {
-            base.BindingContext = this;
+            BindingContext = this;
 
             AddressPointList = new List<string>()
             {
@@ -21,11 +18,7 @@ namespace MapPolylineProject.Page
                 "77500 Chelles, France"
             };
 
-            Debug.WriteLine("HALLOOOO");
-
             InitializeComponent();
-
-            //MapTest.PolylineAddressPoints = AddressPointList;
         }
     }
 }

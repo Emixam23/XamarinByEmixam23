@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +10,15 @@ using Xamarin.Forms.Maps;
 
 namespace MapPolylineProject.CustomControl
 {
-    public class CustomMap : Map, INotifyPropertyChanged
+    public class CustomMap : Map
     {
         public static readonly BindableProperty PolylineAddressPointsProperty =
-            BindableProperty.Create(nameof(PolylineAddressPoints), typeof(List<string>), typeof(CustomMap), null);
-        public List<string> PolylineAddressPoints
+            BindableProperty.Create(nameof(PolylineAddressPoints), typeof(IList<string>), typeof(CustomMap), null,
+                propertyChanged: OnPolyLineAddressPointsPropertyChanged);
+        public IList<string> PolylineAddressPoints
         {
-            get { return (List<string>)GetValue(PolylineAddressPointsProperty); }
-            set
-            {
-                SetValue(PolylineAddressPointsProperty, value);
-                this.GeneratePolylineCoordinatesInner();
-            }
+            get { return (IList<string>)GetValue(PolylineAddressPointsProperty); }
+            set { SetValue(PolylineAddressPointsProperty, value); }
         }
 
         public static readonly BindableProperty PolylineCoordinatesProperty =
@@ -63,7 +59,6 @@ namespace MapPolylineProject.CustomControl
         /*public enum CameraFocusReference
         {
             None,
-            OnCurrentPosition,
             OnPolyline
         }
         public static readonly BindableProperty CameraFocusProperty =
@@ -105,6 +100,18 @@ namespace MapPolylineProject.CustomControl
         #region Generation methods
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #region OnPolyLineAddressPointsPropertyChanged
+        public static void OnPolyLineAddressPointsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((CustomMap)bindable).OnPolyLineAddressPointsPropertyChanged((IList<string>)oldValue, (IList<string>)newValue);
+        }
+
+        void OnPolyLineAddressPointsPropertyChanged(IList<string> oldValue, IList<string> newValue)
+        {
+            GeneratePolylineCoordinatesInner();
+        }
+        #endregion
+
         public async void GeneratePolylineCoordinatesInner()
         {
             if (this.PolylineAddressPoints != null)
@@ -118,7 +125,7 @@ namespace MapPolylineProject.CustomControl
             }
         }
 
-        public static async Task<List<GeoPosition>> GeneratePolylineCoordinates(List<string> AddressPoints)
+        public static async Task<List<GeoPosition>> GeneratePolylineCoordinates(IList<string> AddressPoints)
         {
             if (AddressPoints.Count > 1)
             {
@@ -190,13 +197,9 @@ namespace MapPolylineProject.CustomControl
                 {
                     response = await client.PostAsync(aditionnal_URL, content);
                 }
-                catch (NullReferenceException e)
+                catch (Exception)
                 {
-                    Debug.WriteLine("NullReferenceException is thrown ! " + e.ToString());
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Something is thrown ! " + e.ToString());
+                    return (null);
                 }
                 string result = await response.Content.ReadAsStringAsync();
                 if (result != null)
@@ -205,21 +208,19 @@ namespace MapPolylineProject.CustomControl
                     {
                         return JObject.Parse(result);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        Debug.WriteLine(e.ToString());
-                        return null;
+                        return (null);
                     }
                 }
                 else
                 {
-                    return null;
+                    return (null);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.WriteLine(e.ToString());
-                return null;
+                return (null);
             }
         }
         /// <summary>
