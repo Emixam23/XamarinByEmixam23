@@ -7,7 +7,7 @@ namespace MapTileProject.UWP
         public MainPage()
         {
             this.InitializeComponent();
-            FormsMaps.Init("YOUR_BING_MAP_KEY_UWP");
+            FormsMaps.Init("YOUR_BING_KEY");
             LoadApplication(new MapTileProject.App());
         }
     }

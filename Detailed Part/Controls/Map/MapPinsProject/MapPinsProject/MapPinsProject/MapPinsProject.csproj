@@ -38,7 +38,6 @@
     <Compile Include="App.cs" />
     <Compile Include="CustomControl\CustomMap.cs" />
     <Compile Include="Models\CustomPin.cs" />
-    <Compile Include="Models\Position.cs" />
     <Compile Include="Page\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

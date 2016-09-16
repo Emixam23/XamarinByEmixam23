@@ -37,8 +37,8 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="CustomControl\CustomMap.cs" />
-    <Compile Include="MapTilePage.xaml.cs">
-      <DependentUpon>MapTilePage.xaml</DependentUpon>
+    <Compile Include="Page\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,7 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MapTilePage.xaml">
+    <EmbeddedResource Include="Page\MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

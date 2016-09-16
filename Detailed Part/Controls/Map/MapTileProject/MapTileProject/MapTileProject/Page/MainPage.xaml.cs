@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
-namespace MapTileProject
+namespace MapTileProject.Page
 {
-    public partial class MapTilePage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        public MapTilePage()
+        public MainPage()
         {
             InitializeComponent();
         }

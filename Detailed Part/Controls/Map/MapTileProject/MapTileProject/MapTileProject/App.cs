@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using MapTileProject.Page;
+using Xamarin.Forms;
 
 namespace MapTileProject
 {
@@ -7,7 +8,7 @@ namespace MapTileProject
         public App()
         {
             // The root page of your application
-            MainPage = new MapTilePage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()

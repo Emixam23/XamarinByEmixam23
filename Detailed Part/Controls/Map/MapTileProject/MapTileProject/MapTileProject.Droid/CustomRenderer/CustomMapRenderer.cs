@@ -117,7 +117,6 @@ namespace MapTileProject.Droid.CustomRenderer
             public override Java.Net.URL GetTileUrl(int x, int y, int z)
             {
                 var url = urlTemplate.Replace("{z}", z.ToString()).Replace("{x}", x.ToString()).Replace("{y}", y.ToString());
-                Console.WriteLine(url);
                 return new Java.Net.URL(url);
             }
         }

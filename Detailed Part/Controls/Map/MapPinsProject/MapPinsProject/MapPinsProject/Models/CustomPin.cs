@@ -1,4 +1,5 @@
 ﻿using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace MapPinsProject.Models
 {

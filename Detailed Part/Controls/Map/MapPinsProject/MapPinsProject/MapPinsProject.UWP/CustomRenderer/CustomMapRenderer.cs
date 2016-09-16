@@ -3,16 +3,9 @@ using MapPinsProject.Models;
 using MapPinsProject.UWP.CustomRenderer;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls.Maps;
-using Windows.UI.Xaml.Media.Imaging;
-using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.UWP;
 using Xamarin.Forms.Platform.UWP;
@@ -62,7 +55,8 @@ namespace MapPinsProject.UWP.CustomRenderer
                         {
                             Title = pin.Name,
                             Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/Pin/customicon.png")),
-                            Location = new Geopoint(new BasicGeoposition() { Latitude = pin.Position.Latitude, Longitude = pin.Position.Longitude } )
+                            Location = new Geopoint(new BasicGeoposition() { Latitude = pin.Position.Latitude, Longitude = pin.Position.Longitude }),
+                            NormalizedAnchorPoint = new Windows.Foundation.Point(0.5, 1.0)
                         });
                     }
                 }
