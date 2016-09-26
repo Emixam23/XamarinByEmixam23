@@ -1,6 +1,7 @@
 ﻿using MapPinsProject.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
@@ -39,6 +40,29 @@ namespace MapPinsProject.CustomControl
             get { return (CameraFocusReference)GetValue(CameraFocusParameterProperty); }
             set { SetValue(CameraFocusParameterProperty, value); }
         }
+
+        public static readonly BindableProperty ZoomLevelProperty =
+            BindableProperty.Create(nameof(ZoomLevel), typeof(Distance), typeof(CustomMap), new Distance());
+        public Distance ZoomLevel
+        {
+            get { return (Distance)GetValue(ZoomLevelProperty); }
+            set { SetValue(ZoomLevelProperty, value); }
+        }
+
+        #region Constructor
+        public CustomMap()
+        {
+            this.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            {
+                CustomMap map = sender as CustomMap;
+                if (map.VisibleRegion != null)
+                {
+                    this.ZoomLevel = (map.VisibleRegion.Radius);
+                    Debug.WriteLine("Xamarin Forms Map Radius: {0} Kilometers | {1} Meters | {2} Miles.", ZoomLevel.Kilometers, ZoomLevel.Meters, ZoomLevel.Miles);
+                }
+            };
+        }
+        #endregion
 
         #region Camera focus definition
         public class CameraFocusData
