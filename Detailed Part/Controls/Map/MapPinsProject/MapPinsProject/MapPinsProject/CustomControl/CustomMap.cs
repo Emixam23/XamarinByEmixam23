@@ -41,6 +41,30 @@ namespace MapPinsProject.CustomControl
             set { SetValue(CameraFocusParameterProperty, value); }
         }
 
+        public static readonly BindableProperty PinSizeProperty =
+            BindableProperty.Create(nameof(PinSize), typeof(uint), typeof(CustomMap), Convert.ToUInt32(50));
+        public uint PinSize
+        {
+            get { return (uint)GetValue(PinSizeProperty); }
+            set { SetValue(PinSizeProperty, value); }
+        }
+        
+        public static readonly BindableProperty PinSizedFromElementProperty =
+            BindableProperty.Create(nameof(PinSizedFromElement), typeof(bool), typeof(CustomMap), false);
+        public bool PinSizedFromElement
+        {
+            get { return (bool)GetValue(PinSizedFromElementProperty); }
+            set { SetValue(PinSizedFromElementProperty, value); }
+        }
+
+        public static readonly BindableProperty PinImageSourceProperty =
+            BindableProperty.Create(nameof(PinImageSource), typeof(ImageSource), typeof(CustomMap), null);
+        public uint PinImageSource
+        {
+            get { return (uint)GetValue(PinImageSourceProperty); }
+            set { SetValue(PinImageSourceProperty, value); }
+        }
+
         public static readonly BindableProperty ZoomLevelProperty =
             BindableProperty.Create(nameof(ZoomLevel), typeof(Distance), typeof(CustomMap), new Distance());
         public Distance ZoomLevel
@@ -48,6 +72,44 @@ namespace MapPinsProject.CustomControl
             get { return (Distance)GetValue(ZoomLevelProperty); }
             set { SetValue(ZoomLevelProperty, value); }
         }
+
+        public static readonly BindableProperty PinZoomVisibilityLimitProperty =
+            BindableProperty.Create(nameof(PinZoomVisibilityLimit), typeof(double), typeof(CustomMap), 0.0);
+        public double PinZoomVisibilityLimit
+        {
+            get { return (double)GetValue(PinZoomVisibilityLimitProperty); }
+            set { SetValue(PinZoomVisibilityLimitProperty, value); }
+        }
+
+        public enum PinZoomVisibilityLimitUnityName
+        {
+            Kilometers,
+            Meters,
+            Miles
+        }
+        public static readonly BindableProperty PinZoomVisibilityLimitUnityProperty =
+            BindableProperty.Create(nameof(PinZoomVisibilityLimitUnity), typeof(PinZoomVisibilityLimitUnityName), typeof(CustomMap), PinZoomVisibilityLimitUnityName.Kilometers);
+        public PinZoomVisibilityLimitUnityName PinZoomVisibilityLimitUnity
+        {
+            get { return (PinZoomVisibilityLimitUnityName)GetValue(PinZoomVisibilityLimitUnityProperty); }
+            set { SetValue(PinZoomVisibilityLimitUnityProperty, value); }
+        }
+
+        public enum PinZoomVisibilityLimitSourceEnum
+        {
+            Map,
+            None,
+            Pin
+        }
+        public static readonly BindableProperty PinZoomVisibilityLimitSourceProperty =
+            BindableProperty.Create(nameof(PinZoomVisibilityLimitSource), typeof(PinZoomVisibilityLimitSourceEnum), typeof(CustomMap), PinZoomVisibilityLimitSourceEnum.None);
+        public PinZoomVisibilityLimitSourceEnum PinZoomVisibilityLimitSource
+        {
+            get { return (PinZoomVisibilityLimitSourceEnum)GetValue(PinZoomVisibilityLimitSourceProperty); }
+            set { SetValue(PinZoomVisibilityLimitSourceProperty, value); }
+        }
+
+        public Action<CustomPin> PinClickedCallback { get; set; }
 
         #region Constructor
         public CustomMap()
@@ -58,7 +120,7 @@ namespace MapPinsProject.CustomControl
                 if (map.VisibleRegion != null)
                 {
                     this.ZoomLevel = (map.VisibleRegion.Radius);
-                    Debug.WriteLine("Xamarin Forms Map Radius: {0} Kilometers | {1} Meters | {2} Miles.", ZoomLevel.Kilometers, ZoomLevel.Meters, ZoomLevel.Miles);
+                    //Debug.WriteLine("Xamarin Forms Map Radius: {0} Kilometers | {1} Meters | {2} Miles.", ZoomLevel.Kilometers, ZoomLevel.Meters, ZoomLevel.Miles);
                 }
             };
         }
