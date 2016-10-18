@@ -19,12 +19,12 @@ namespace MapPinsProject.Page
 
             CustomPins = new List<CustomPin>()
             {
-                new CustomPin() { Name = "Le Mans", Details = "Famous city for race driver !", ImageSource = "CustomIconImage.png", Position = new Position(48,0.2), AnchorPoint = new Point(0.5, 1) },
-                new CustomPin() { Name = "Ruaudin", Details = "Where I'm coming from.", ImageSource = "CustomIconImage.png", Position = new Position(47.9450,0.26) },
-                new CustomPin() { Name = "Chelles", Details = "Someone there.", ImageSource = "CustomIconImage.png", Position = new Position(48.877535,2.590160) },
-                new CustomPin() { Name = "Lille", Details = "Le nord..", ImageSource = "CustomIconImage.png", Position = new Position(50.629250, 3.057256) },
-                new CustomPin() { Name = "Limoges", Details = "I have been there ! :o", ImageSource = "CustomIconImage.png", Position = new Position(45.833619, 1.261105) },
-                new CustomPin() { Name = "Douarnenez", Details = "A trip..", ImageSource = "CustomIconImage.png", Position = new Position(48.093228,-4.328619) }
+                new CustomPin() { Name = "Le Mans", Details = "Famous city for race driver !", ImageSource = "CustomIconImage.png", Position = new Position(48,0.2), PinZoomVisibilityLimit = 150, PinSize = 75},
+                new CustomPin() { Name = "Ruaudin", Details = "Where I'm coming from.", ImageSource = "CustomIconImage.png", Position = new Position(47.9450,0.26), PinZoomVisibilityLimit = 75, PinSize = 65 },
+                new CustomPin() { Name = "Chelles", Details = "Someone there.", ImageSource = "CustomIconImage.png", Position = new Position(48.877535,2.590160), PinZoomVisibilityLimit = 50, PinSize = 70 },
+                new CustomPin() { Name = "Lille", Details = "Le nord..", ImageSource = "CustomIconImage.png", Position = new Position(50.629250, 3.057256), PinZoomVisibilityLimit = 44, PinSize = 40 },
+                new CustomPin() { Name = "Limoges", Details = "I have been there ! :o", ImageSource = "CustomIconImage.png", Position = new Position(45.833619, 1.261105), PinZoomVisibilityLimit = 65, PinSize = 20 },
+                new CustomPin() { Name = "Douarnenez", Details = "A trip..", ImageSource = "CustomIconImage.png", Position = new Position(48.093228,-4.328619), PinZoomVisibilityLimit = 110, PinSize = 50 }
             };
 
             PinActionClicked = PinClickedCallback;
@@ -38,7 +38,7 @@ namespace MapPinsProject.Page
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                Debug.WriteLine("{0}, {1}", customPinClicked.Name, customPinClicked.Details);
+                Debug.WriteLine("{0}, {1}", customPinClicked.PinZoomVisibilityLimit, customPinClicked.Name);
             });
         }
     }

@@ -10,7 +10,7 @@ namespace MapPinsProject.Models
         public string ImageSource { get; set; }
         public Position Position { get; set; }
         public uint PinSize { get; set; }
-        public int PinZoomVisibilityLimit { get; set; }
+        public uint PinZoomVisibilityLimit { get; set; }
         public Point AnchorPoint { get; set; }
 
         public CustomPin()
@@ -20,7 +20,7 @@ namespace MapPinsProject.Models
             ImageSource = "";
             Position = new Position(48, 0.2);
             PinSize = 50;
-            PinZoomVisibilityLimit = 0;
+            PinZoomVisibilityLimit = uint.MaxValue;
             AnchorPoint = new Point(0.5, 1);
         }
     }

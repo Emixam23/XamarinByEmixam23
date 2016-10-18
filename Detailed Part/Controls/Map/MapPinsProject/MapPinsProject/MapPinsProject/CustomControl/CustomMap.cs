@@ -48,13 +48,19 @@ namespace MapPinsProject.CustomControl
             get { return (uint)GetValue(PinSizeProperty); }
             set { SetValue(PinSizeProperty, value); }
         }
-        
-        public static readonly BindableProperty PinSizedFromElementProperty =
-            BindableProperty.Create(nameof(PinSizedFromElement), typeof(bool), typeof(CustomMap), false);
-        public bool PinSizedFromElement
+
+
+        public enum PinSizeSourceName
         {
-            get { return (bool)GetValue(PinSizedFromElementProperty); }
-            set { SetValue(PinSizedFromElementProperty, value); }
+            Map,
+            Pin
+        }
+        public static readonly BindableProperty PinSizeSourceProperty =
+            BindableProperty.Create(nameof(PinSizeSource), typeof(PinSizeSourceName), typeof(CustomMap), PinSizeSourceName.Pin);
+        public PinSizeSourceName PinSizeSource
+        {
+            get { return (PinSizeSourceName)GetValue(PinSizeSourceProperty); }
+            set { SetValue(PinSizeSourceProperty, value); }
         }
 
         public static readonly BindableProperty PinImageSourceProperty =
@@ -109,7 +115,13 @@ namespace MapPinsProject.CustomControl
             set { SetValue(PinZoomVisibilityLimitSourceProperty, value); }
         }
 
-        public Action<CustomPin> PinClickedCallback { get; set; }
+        public static readonly BindableProperty PinClickedCallbackProperty =
+            BindableProperty.Create(nameof(PinClickedCallback), typeof(Action<CustomPin>), typeof(CustomMap), null);
+        public Action<CustomPin> PinClickedCallback
+        {
+            get { return (Action<CustomPin>)GetValue(PinClickedCallbackProperty); }
+            set { SetValue(PinClickedCallbackProperty, value); }
+        }
 
         #region Constructor
         public CustomMap()

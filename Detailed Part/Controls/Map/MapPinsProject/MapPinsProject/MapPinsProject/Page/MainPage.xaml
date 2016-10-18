@@ -2,8 +2,17 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:control="clr-namespace:MapPinsProject.CustomControl;assembly=MapPinsProject"
+             xmlns:converter="clr-namespace:MapPinsProject.ValueConverter;assembly=MapPinsProject"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              x:Class="MapPinsProject.Page.MainPage">
-  
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converter:UintValueConverter x:Key="Uint"></converter:UintValueConverter>
+      <!--<System:Uint32 x:Key="PinSizeValue">50</System:Uint32>-->
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
   <ContentPage.Content>
     <!-- 
     Here we put the map. 
@@ -13,9 +22,14 @@
     -Generally, the assembly is the name of your project.
     -->
     <control:CustomMap x:Name="MapTest" CustomPins="{Binding CustomPins}" CameraFocusParameter="OnPins"
-                       PinSize="{Binding TMP}" PinZoomVisibilityLimit="150" PinZoomVisibilityLimitSource="Map" PinZoomVisibilityLimitUnity="Kilometers"
+                       PinSize="{Binding TMP, Converter={StaticResource Uint}}" PinSizeSource="Map"
+                       PinZoomVisibilityLimit="150" PinZoomVisibilityLimitSource="Pin" PinZoomVisibilityLimitUnity="Kilometers"
+                       PinClickedCallback="{Binding PinActionClicked}"
                        VerticalOptions="Fill" HorizontalOptions="Fill"/>
-
   </ContentPage.Content>
 
 </ContentPage>
+
+<!--, Converter={StaticResource ActionCallbackConverter}}"
+PinSize="{Binding TMP, Converter={StaticResource Uint}}" -->
+

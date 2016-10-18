@@ -33,7 +33,7 @@ namespace MapPinsProject.UWP.CustomRenderer
 
             if (e.NewElement != null)
             {
-                customMap = (CustomMap)e.NewElement;
+                customMap = e.NewElement as CustomMap;
                 nativeMap = Control as MapControl;
                 MapIconPinLinkDictionary = null;
                 nativeMap.MapElementClick += OnPinClicked;
@@ -56,14 +56,6 @@ namespace MapPinsProject.UWP.CustomRenderer
         {
             MapIcon mapIconClicked = ea.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
             customMap.PinClickedCallback(MapIconPinLinkDictionary[mapIconClicked] as CustomPin);
-
-            /*Debug.WriteLine("Element clicked !");
-            Debug.WriteLine("{0}, {1}", MapIconPinLinkDictionary[mapIconClicked].Name, MapIconPinLinkDictionary[mapIconClicked].Details);*/
-        }
-
-        private void DisplayCustomPinInfo(CustomPin pin)
-        {
-            Debug.WriteLine("AnchorPoint", pin.AnchorPoint);
         }
 
         private void UpdatePins()
@@ -80,55 +72,30 @@ namespace MapPinsProject.UWP.CustomRenderer
 
                     Debug.WriteLine("Current zoom is => {0}", customMap.ZoomLevel.Kilometers);
 
-                    Debug.WriteLine("---- UPDATE PINS ----");
                     if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
-                    {
-                        Debug.WriteLine("pin limit source none");
                         addPins();
-                    }
                     else
                     {
                         if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Kilometers)
                         {
-                            Debug.WriteLine("pin limit unity kilometers");
                             if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Kilometers < customMap.PinZoomVisibilityLimit)
-                            {
-                                Debug.WriteLine("pin limit source map");
                                 addPins();
-                            }
                             else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                            {
-                                Debug.WriteLine("pin limit source pin");
-                                addPins(customMap.ZoomLevel.Kilometers);
-                            }
+                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Kilometers);
                         }
                         else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Meters)
                         {
-                            Debug.WriteLine("pin limit unity meters");
                             if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Meters < customMap.PinZoomVisibilityLimit)
-                            {
-                                Debug.WriteLine("pin limit source map");
                                 addPins();
-                            }
                             else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                            {
-                                Debug.WriteLine("pin limit source pin");
-                                addPins(customMap.ZoomLevel.Meters);
-                            }
+                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Meters);
                         }
                         else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Miles)
                         {
-                            Debug.WriteLine("pin limit unity miles");
                             if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Miles < customMap.PinZoomVisibilityLimit)
-                            {
-                                Debug.WriteLine("pin limit source map");
                                 addPins();
-                            }
                             else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                            {
-                                Debug.WriteLine("pin limit source pin");
-                                addPins(customMap.ZoomLevel.Miles);
-                            }
+                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Miles);
                         }
                     }
                     Debug.WriteLine("---- UPDATE PINS ----");
@@ -136,43 +103,36 @@ namespace MapPinsProject.UWP.CustomRenderer
             }
         }
 
-        private async void addPins()
+        private void addPins()
         {
-            MapIcon mapIcon;
-
             foreach (CustomPin pin in customMap.CustomPins)
             {
-                mapIcon = new MapIcon()
-                {
-                    Title = pin.Name,
-                    Image = await ResizeImage(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/Pin/" + pin.ImageSource)), pin.PinSize),
-                    Location = new Geopoint(new BasicGeoposition() { Latitude = pin.Position.Latitude, Longitude = pin.Position.Longitude }),
-                    NormalizedAnchorPoint = new Point(pin.AnchorPoint.X, pin.AnchorPoint.Y)
-                };
-                nativeMap.MapElements.Add(mapIcon);
-                MapIconPinLinkDictionary.Add(mapIcon, pin);
+                addMapIcon(pin);
             }
         }
 
-        private async void addPins(double currentZoom)
+        private void addPins_AboutPinLimitOfZoom(double currentZoom)
         {
-            MapIcon mapIcon;
-
             foreach (CustomPin pin in customMap.CustomPins)
             {
-                if (pin.PinZoomVisibilityLimit < currentZoom)
+                if (currentZoom < pin.PinZoomVisibilityLimit)
                 {
-                    mapIcon = new MapIcon()
-                    {
-                        Title = pin.Name,
-                        Image = await ResizeImage(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/Pin/" + pin.ImageSource)), pin.PinSize),
-                        Location = new Geopoint(new BasicGeoposition() { Latitude = pin.Position.Latitude, Longitude = pin.Position.Longitude }),
-                        NormalizedAnchorPoint = new Point(pin.AnchorPoint.X, pin.AnchorPoint.Y)
-                    };
-                    nativeMap.MapElements.Add(mapIcon);
-                    MapIconPinLinkDictionary.Add(mapIcon, pin);
+                    addMapIcon(pin);
                 }
             }
+        }
+
+        private async void addMapIcon(CustomPin pin)
+        {
+            MapIcon mapIcon = new MapIcon()
+            {
+                Title = pin.Name,
+                Image = await ResizeImage(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/Pin/" + pin.ImageSource)), ((customMap.PinSizeSource == CustomMap.PinSizeSourceName.Pin) ? (pin.PinSize) : (customMap.PinSize))),
+                Location = new Geopoint(new BasicGeoposition() { Latitude = pin.Position.Latitude, Longitude = pin.Position.Longitude }),
+                NormalizedAnchorPoint = new Point(pin.AnchorPoint.X, pin.AnchorPoint.Y)
+            };
+            nativeMap.MapElements.Add(mapIcon);
+            MapIconPinLinkDictionary.Add(mapIcon, pin);
         }
 
         #region Additional functions
