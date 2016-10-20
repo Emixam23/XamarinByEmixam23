@@ -70,8 +70,6 @@ namespace MapPinsProject.UWP.CustomRenderer
                     else
                         MapIconPinLinkDictionary.Clear();
 
-                    Debug.WriteLine("Current zoom is => {0}", customMap.ZoomLevel.Kilometers);
-
                     if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
                         addPins();
                     else
@@ -98,7 +96,6 @@ namespace MapPinsProject.UWP.CustomRenderer
                                 addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Miles);
                         }
                     }
-                    Debug.WriteLine("---- UPDATE PINS ----");
                 }
             }
         }

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:control="clr-namespace:ButtonProject.CustomControl;assembly=ButtonProject"
+             x:Class="ButtonProject.Page.MainPage">
+  <ContentPage.Content>
+    <control:CustomButton x:Name="button" Text="Click Me !" VerticalOptions="Center" HorizontalOptions="Center"
+                          Clicked="OnCustomButtonClicked" LongPressCallback="{Binding OnCustomButtonLongPressCallback}"/>
+  </ContentPage.Content>
+</ContentPage>
