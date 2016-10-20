@@ -5,6 +5,6 @@
              x:Class="ButtonProject.Page.MainPage">
   <ContentPage.Content>
     <control:CustomButton x:Name="button" Text="Click Me !" VerticalOptions="Center" HorizontalOptions="Center"
-                          Clicked="OnCustomButtonClicked" LongPressCallback="{Binding OnCustomButtonLongPressCallback}"/>
+                          Clicked="OnCustomButtonClicked" LongPress="OnCustomButtonLongPress"/>
   </ContentPage.Content>
 </ContentPage>

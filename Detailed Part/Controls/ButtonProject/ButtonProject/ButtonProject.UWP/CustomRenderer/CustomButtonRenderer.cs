@@ -1,5 +1,6 @@
 ﻿using ButtonProject.CustomControl;
 using ButtonProject.UWP.CustomRenderer;
+using System;
 using System.Diagnostics;
 using Windows.UI.Xaml.Input;
 using Xamarin.Forms;
@@ -12,6 +13,7 @@ namespace ButtonProject.UWP.CustomRenderer
     {
         CustomButton customButton;
 
+        private bool isHolding;
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
             base.OnElementChanged(e);
@@ -19,23 +21,25 @@ namespace ButtonProject.UWP.CustomRenderer
             if (e.NewElement != null)
             {
                 customButton = e.NewElement as CustomButton;
-                Control.Holding += OnHold;
-                Debug.WriteLine("Hey !");
-            }
-        }
 
-        private bool isHolding = false;
-        private void OnHold(object sender, HoldingRoutedEventArgs e)
-        {
-            if (!isHolding)
-            {
-                customButton.LongPressCallback(sender);
-                isHolding = true;
-            }
-            else
                 isHolding = false;
-            //Debug test
-            customButton.test();
+
+                Control.IsHoldingEnabled = true;
+                Control.Holding += (s, ea) =>
+                {
+                    if (!isHolding)
+                    {
+                        isHolding = true;
+                        customButton.IsEnabled = false;
+                        customButton.OnLongPress();
+                    }
+                    else
+                    {
+                        isHolding = false;
+                        customButton.IsEnabled = true;
+                    }
+                };
+            }
         }
     }
 }
