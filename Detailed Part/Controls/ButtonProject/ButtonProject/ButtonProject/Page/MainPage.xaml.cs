@@ -13,7 +13,7 @@ namespace ButtonProject.Page
 
         private void OnCustomButtonLongPress(object sender, EventArgs ea)
         {
-            Debug.WriteLine("Button Long Pressed !");
+            Debug.WriteLine("Button Long Pressed and/or Right Click got !");
         }
 
         private void OnCustomButtonClicked(object sender, EventArgs ea)

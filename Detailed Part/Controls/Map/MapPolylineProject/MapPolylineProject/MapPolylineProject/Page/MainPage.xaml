@@ -12,7 +12,8 @@
     -The clr-namespace attribute is the namespace of your Custom object (PCL part).
     -Generally, the assembly is the name of your project.
     -->
-    <control:CustomMap x:Name="MapTest" PolylineAddressPoints="{Binding AddressPointList}"
+    <control:CustomMap PolylineAddressPoints="{Binding AddressPointList}" CameraFocusParameter="OnPolyline" 
+                       PolylineColor="Aqua" PolylineThickness="3"
                        VerticalOptions="Fill" HorizontalOptions="Fill"/>
 
   </ContentPage.Content>

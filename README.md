@@ -31,9 +31,11 @@ App Examples is simply applications where some projects of the **Detailed Part**
 
 ## List of projects ##
 
-- [Gif]()
+- [Button](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ButtonProject)
+- [Gif](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/GifProject)
 - [Image Circle](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ImageCircleProject)
-- **Map** => [Polyline](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapPolylineProject), [Tiles Customization](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapTileProject)
+- **Map** => [Pins](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapPinsProject), [Polyline](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapPolylineProject), [Tiles Customization](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapTileProject), [UIOptions](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapUIOptionsProject)
+- [ShapeDrawing](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ShapeDrawingProject)
 
 ----------
 

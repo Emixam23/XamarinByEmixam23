@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:control="clr-namespace:MapUIOptionsProject.CustomControl;assembly=MapUIOptionsProject"
+             x:Class="MapUIOptionsProject.Page.MainPage">
+
+  <ContentPage.Content>
+    <!-- 
+    Here we put the map. 
+    Do not forget to add 'xmlns:local':
+    
+    -The clr-namespace attribute is the namespace of your Custom object (PCL part).
+    -Generally, the assembly is the name of your project.
+    -->
+    <control:CustomMap IsUIOptionsEnable="False"
+                       VerticalOptions="Fill" HorizontalOptions="Fill"/>
+
+  </ContentPage.Content>
+
+</ContentPage>
