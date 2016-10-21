@@ -70,7 +70,7 @@ namespace MapPolylineProject.Droid.CustomRenderer
         /// </summary>
         private void UpdatePolyLine()
         {
-            if (map != null)
+            if (map != null && ((CustomMap)this.Element).PolylineCoordinates != null)
             {
                 if (polyline != null)
                 {
