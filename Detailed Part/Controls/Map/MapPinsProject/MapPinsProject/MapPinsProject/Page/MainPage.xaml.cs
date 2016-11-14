@@ -1,44 +1,64 @@
 ﻿using MapPinsProject.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
 namespace MapPinsProject.Page
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
-        public List<CustomPin> CustomPins { get; set; }
+        /// <summary>
+        /// Handler for event of updating or changing the 
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ObservableCollection<CustomPin> CustomPins { get; set; }
         public Action<CustomPin> PinActionClicked { get; set; }
-        public uint TMP { get; set; }
+        public uint PinsSize { get; set; }
 
         public MainPage()
         {
             base.BindingContext = this;
 
-            CustomPins = new List<CustomPin>()
+            Debug.WriteLine("Intialization....");
+
+            CustomPins = new ObservableCollection<CustomPin>()
             {
-                new CustomPin() { Name = "Le Mans", Details = "Famous city for race driver !", ImageSource = "CustomIconImage.png", Position = new Position(48,0.2), PinZoomVisibilityLimit = 150, PinSize = 75},
-                new CustomPin() { Name = "Ruaudin", Details = "Where I'm coming from.", ImageSource = "CustomIconImage.png", Position = new Position(47.9450,0.26), PinZoomVisibilityLimit = 75, PinSize = 65 },
-                new CustomPin() { Name = "Chelles", Details = "Someone there.", ImageSource = "CustomIconImage.png", Position = new Position(48.877535,2.590160), PinZoomVisibilityLimit = 50, PinSize = 70 },
-                new CustomPin() { Name = "Lille", Details = "Le nord..", ImageSource = "CustomIconImage.png", Position = new Position(50.629250, 3.057256), PinZoomVisibilityLimit = 44, PinSize = 40 },
-                new CustomPin() { Name = "Limoges", Details = "I have been there ! :o", ImageSource = "CustomIconImage.png", Position = new Position(45.833619, 1.261105), PinZoomVisibilityLimit = 65, PinSize = 20 },
-                new CustomPin() { Name = "Douarnenez", Details = "A trip..", ImageSource = "CustomIconImage.png", Position = new Position(48.093228,-4.328619), PinZoomVisibilityLimit = 110, PinSize = 50 }
+                new CustomPin() { Address="4720 E Atherton Street, Long Beach", Details = "Famous city for race driver !", ImagePath = "CustomIconImage.png"},
+                new CustomPin() { Address = "Ruaudin", Details = "Where I'm coming from.", ImagePath = "CustomIconImage.png" },
+                new CustomPin() { Address = "Chelles", Details = "Someone there.", ImagePath = "CustomIconImage.png" },
+                new CustomPin() { Address = "Lille", Details = "Le nord..", ImagePath = "CustomIconImage.png" },
+                new CustomPin() { Address = "Limoges", Details = "I have been there ! :o", ImagePath = "CustomIconImage.png" },
+                new CustomPin() { Address = "Douarnenez", Details = "A trip..", ImagePath = "CustomIconImage.png" }
             };
+
+            Debug.WriteLine("Initialization done.");
 
             PinActionClicked = PinClickedCallback;
 
-            TMP = Convert.ToUInt32(23);
+            PinsSize = Convert.ToUInt32(100);
 
             InitializeComponent();
+            Debug.WriteLine("Components done.");
+
+
+            Task.Run(() =>
+            {
+                Task.Delay(5000);
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomPins)));
+            });
         }
 
         private void PinClickedCallback(CustomPin customPinClicked)
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                Debug.WriteLine("{0}, {1}", customPinClicked.PinZoomVisibilityLimit, customPinClicked.Name);
+                Debug.WriteLine("{0}: {1}/{2}", customPinClicked.Address, customPinClicked.PinZoomVisibilityMinimumLimit, customPinClicked.PinZoomVisibilityMaximumLimit);
             });
         }
     }

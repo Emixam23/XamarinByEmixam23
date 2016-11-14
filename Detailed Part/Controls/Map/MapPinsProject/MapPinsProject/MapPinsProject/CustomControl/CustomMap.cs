@@ -1,9 +1,14 @@
 ﻿using MapPinsProject.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -12,11 +17,11 @@ namespace MapPinsProject.CustomControl
     public class CustomMap : Map
     {
         public static readonly BindableProperty CustomPinsProperty =
-            BindableProperty.Create(nameof(CustomPins), typeof(IList<CustomPin>), typeof(CustomMap), null,
+            BindableProperty.Create(nameof(CustomPins), typeof(ObservableCollection<CustomPin>), typeof(CustomMap), null,
                 propertyChanged: OnCustomPinsPropertyChanged);
-        public IList<CustomPin> CustomPins
+        public ObservableCollection<CustomPin> CustomPins
         {
-            get { return (IList<CustomPin>)GetValue(CustomPinsProperty); }
+            get { return (ObservableCollection<CustomPin>)GetValue(CustomPinsProperty); }
             set { SetValue(CustomPinsProperty, value); }
         }
 
@@ -49,26 +54,38 @@ namespace MapPinsProject.CustomControl
             set { SetValue(PinSizeProperty, value); }
         }
 
-
         public enum PinSizeSourceName
         {
             Map,
             Pin
         }
         public static readonly BindableProperty PinSizeSourceProperty =
-            BindableProperty.Create(nameof(PinSizeSource), typeof(PinSizeSourceName), typeof(CustomMap), PinSizeSourceName.Pin);
+            BindableProperty.Create(nameof(PinSizeSource), typeof(PinSizeSourceName), typeof(CustomMap), PinSizeSourceName.Map);
         public PinSizeSourceName PinSizeSource
         {
             get { return (PinSizeSourceName)GetValue(PinSizeSourceProperty); }
             set { SetValue(PinSizeSourceProperty, value); }
         }
 
-        public static readonly BindableProperty PinImageSourceProperty =
-            BindableProperty.Create(nameof(PinImageSource), typeof(ImageSource), typeof(CustomMap), null);
-        public uint PinImageSource
+        public static readonly BindableProperty PinImagePathProperty =
+            BindableProperty.Create(nameof(PinImagePath), typeof(string), typeof(CustomMap), "");
+        public string PinImagePath
         {
-            get { return (uint)GetValue(PinImageSourceProperty); }
-            set { SetValue(PinImageSourceProperty, value); }
+            get { return (string)GetValue(PinImagePathProperty); }
+            set { SetValue(PinImagePathProperty, value); }
+        }
+
+        public enum ImagePathSourceType
+        {
+            FromMap,
+            FromPin
+        }
+        public static readonly BindableProperty PinImagePathSourceProperty =
+            BindableProperty.Create(nameof(PinImagePathSource), typeof(ImagePathSourceType), typeof(CustomMap), ImagePathSourceType.FromMap);
+        public ImagePathSourceType PinImagePathSource
+        {
+            get { return (ImagePathSourceType)GetValue(PinImagePathSourceProperty); }
+            set { SetValue(PinImagePathSourceProperty, value); }
         }
 
         public static readonly BindableProperty ZoomLevelProperty =
@@ -79,12 +96,20 @@ namespace MapPinsProject.CustomControl
             set { SetValue(ZoomLevelProperty, value); }
         }
 
-        public static readonly BindableProperty PinZoomVisibilityLimitProperty =
-            BindableProperty.Create(nameof(PinZoomVisibilityLimit), typeof(double), typeof(CustomMap), 0.0);
-        public double PinZoomVisibilityLimit
+        public static readonly BindableProperty PinZoomVisibilityMaximumLimitProperty =
+            BindableProperty.Create(nameof(PinZoomVisibilityMaximumLimit), typeof(uint), typeof(CustomMap), UInt32.MaxValue);
+        public uint PinZoomVisibilityMaximumLimit
         {
-            get { return (double)GetValue(PinZoomVisibilityLimitProperty); }
-            set { SetValue(PinZoomVisibilityLimitProperty, value); }
+            get { return (uint)GetValue(PinZoomVisibilityMaximumLimitProperty); }
+            set { SetValue(PinZoomVisibilityMaximumLimitProperty, value); }
+        }
+
+        public static readonly BindableProperty PinZoomVisibilityMinimumLimitProperty =
+            BindableProperty.Create(nameof(PinZoomVisibilityMinimumLimit), typeof(uint), typeof(CustomMap), UInt32.MinValue);
+        public uint PinZoomVisibilityMinimumLimit
+        {
+            get { return (uint)GetValue(PinZoomVisibilityMinimumLimitProperty); }
+            set { SetValue(PinZoomVisibilityMinimumLimitProperty, value); }
         }
 
         public enum PinZoomVisibilityLimitUnityName
@@ -123,6 +148,19 @@ namespace MapPinsProject.CustomControl
             set { SetValue(PinClickedCallbackProperty, value); }
         }
 
+        public enum PinClickedCallbackSourceEnum
+        {
+            Map,
+            Pins
+        }
+        public static readonly BindableProperty PinClickedCallbackSourceProperty =
+            BindableProperty.Create(nameof(PinClickedCallbackSource), typeof(PinClickedCallbackSourceEnum), typeof(CustomMap), PinClickedCallbackSourceEnum.Map);
+        public PinClickedCallbackSourceEnum PinClickedCallbackSource
+        {
+            get { return (PinClickedCallbackSourceEnum)GetValue(PinClickedCallbackSourceProperty); }
+            set { SetValue(PinClickedCallbackSourceProperty, value); }
+        }
+
         #region Constructor
         public CustomMap()
         {
@@ -132,9 +170,90 @@ namespace MapPinsProject.CustomControl
                 if (map.VisibleRegion != null)
                 {
                     this.ZoomLevel = (map.VisibleRegion.Radius);
-                    //Debug.WriteLine("Xamarin Forms Map Radius: {0} Kilometers | {1} Meters | {2} Miles.", ZoomLevel.Kilometers, ZoomLevel.Meters, ZoomLevel.Miles);
                 }
             };
+        }
+        #endregion
+
+        #region
+        public async static Task<string> GetAddressName(Position position)
+        {
+            string url = "https://maps.googleapis.com/maps/api/geocode/json";
+            string additionnal_URL = "?latlng=" + position.Latitude + "," + position.Longitude
+            + "&key=" + App.GOOGLE_MAP_API_KEY;
+
+            JObject obj = await CustomMap.GoogleAPIHttpRequest(url, additionnal_URL);
+
+            string address_name;
+            try
+            {
+                address_name = (obj["results"][0]["formatted_address"]).ToString();
+            }
+            catch (Exception)
+            {
+                return ("");
+            }
+            return (address_name);
+        }
+        public async static Task<Position> GetAddressPosition(string name)
+        {
+            string url = "https://maps.googleapis.com/maps/api/geocode/json";
+            string additionnal_URL = "?address=" + name
+            + "&key=" + App.GOOGLE_MAP_API_KEY;
+
+            JObject obj = await CustomMap.GoogleAPIHttpRequest(url, additionnal_URL);
+
+            Position position;
+            try
+            {
+                position = new Position(Double.Parse((obj["results"][0]["geometry"]["location"]["lat"]).ToString()),
+                                        Double.Parse((obj["results"][0]["geometry"]["location"]["lng"]).ToString()));
+            }
+            catch (Exception)
+            {
+                position = new Position();
+            }
+            return (position);
+        }
+
+        private static async Task<JObject> GoogleAPIHttpRequest(string url, string additionnal_URL)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(url);
+
+                var content = new StringContent("{}", Encoding.UTF8, "application/json");
+                HttpResponseMessage response = null;
+                try
+                {
+                    response = await client.PostAsync(additionnal_URL, content);
+                }
+                catch (Exception)
+                {
+                    return (null);
+                }
+                string result = await response.Content.ReadAsStringAsync();
+                if (result != null)
+                {
+                    try
+                    {
+                        return JObject.Parse(result);
+                    }
+                    catch (Exception)
+                    {
+                        return (null);
+                    }
+                }
+                else
+                {
+                    return (null);
+                }
+            }
+            catch (Exception)
+            {
+                return (null);
+            }
         }
         #endregion
 
@@ -148,15 +267,16 @@ namespace MapPinsProject.CustomControl
         {
             CustomMap customMap = ((CustomMap)bindable);
 
+            Debug.WriteLine("Pins collection has changed");
             if (customMap.CameraFocusParameter == CameraFocusReference.OnPins)
             {
                 List<double> latitudes = new List<double>();
                 List<double> longitudes = new List<double>();
 
-                foreach (CustomPin pin in (newValue as List<CustomPin>))
+                foreach (CustomPin pin in (newValue as ObservableCollection<CustomPin>))
                 {
-                    latitudes.Add(pin.Position.Latitude);
-                    longitudes.Add(pin.Position.Longitude);
+                    latitudes.Add(pin.Location.Latitude);
+                    longitudes.Add(pin.Location.Longitude);
                 }
 
                 double lowestLat = latitudes.Min();
@@ -170,6 +290,7 @@ namespace MapPinsProject.CustomControl
 
                 customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
             }
+            Debug.WriteLine("Map pins collection setted !");
         }
         private class DistanceCalculation
         {

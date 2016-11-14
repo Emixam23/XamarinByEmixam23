@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-sdk android:minSdkVersion="15" />
-	<application android:label="$safeprojectname$"></application>
+	<application android:label="$safeprojectname$">
+    <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="YOUR_API_KEY" />
+  </application>
 </manifest>

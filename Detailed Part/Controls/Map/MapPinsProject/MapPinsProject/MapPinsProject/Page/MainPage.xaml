@@ -21,9 +21,8 @@
     -The clr-namespace attribute is the namespace of your Custom object (PCL part).
     -Generally, the assembly is the name of your project.
     -->
-    <control:CustomMap x:Name="MapTest" CustomPins="{Binding CustomPins}" CameraFocusParameter="OnPins"
-                       PinSize="{Binding TMP, Converter={StaticResource Uint}}" PinSizeSource="Map"
-                       PinZoomVisibilityLimit="150" PinZoomVisibilityLimitSource="Pin" PinZoomVisibilityLimitUnity="Kilometers"
+    <control:CustomMap x:Name="MapTest" CustomPins="{Binding CustomPins}" CameraFocusParameter="None"
+                       PinSize="{Binding PinsSize, Converter={StaticResource Uint}}"
                        PinClickedCallback="{Binding PinActionClicked}"
                        VerticalOptions="Fill" HorizontalOptions="Fill"/>
   </ContentPage.Content>

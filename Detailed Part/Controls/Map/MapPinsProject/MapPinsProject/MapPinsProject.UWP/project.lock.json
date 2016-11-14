@@ -272,6 +272,14 @@
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        }
+      },
       "runtime.native.System.IO.Compression/4.1.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -2031,7 +2039,7 @@
           }
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -2045,9 +2053,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -2275,6 +2283,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.any.System.Collections/4.0.11": {
@@ -4168,7 +4184,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -4182,9 +4198,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -4413,6 +4429,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.aot.System.Collections/4.0.10": {
@@ -6344,7 +6368,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -6358,9 +6382,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -6592,6 +6616,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.any.System.Collections/4.0.11": {
@@ -8490,7 +8522,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -8504,9 +8536,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -8739,6 +8771,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.aot.System.Collections/4.0.10": {
@@ -10675,7 +10715,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -10689,9 +10729,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -10923,6 +10963,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.any.System.Collections/4.0.11": {
@@ -12821,7 +12869,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -12835,9 +12883,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -13070,6 +13118,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "compile": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.aot.System.Collections/4.0.10": {
@@ -15006,7 +15062,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.3.1.114": {
+      "Xamarin.Forms/2.3.2.127": {
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
@@ -15020,9 +15076,9 @@
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
         }
       },
-      "Xamarin.Forms.Maps/2.3.1.114": {
+      "Xamarin.Forms.Maps/2.3.2.127": {
         "dependencies": {
-          "Xamarin.Forms": "2.3.1.114"
+          "Xamarin.Forms": "2.3.2.127"
         },
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll": {},
@@ -15325,6 +15381,30 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "Newtonsoft.Json/9.0.1": {
+      "sha512": "U82mHQSKaIk+lpSVCbWYKNavmNH1i5xrExDEquU1i6I5pV6UMOqRnJRSlKO3cMPfcpp0RgDY+8jUXHdQ4IfXvw==",
+      "type": "package",
+      "path": "Newtonsoft.Json/9.0.1",
+      "files": [
+        "Newtonsoft.Json.9.0.1.nupkg.sha512",
+        "Newtonsoft.Json.nuspec",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
+        "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.xml",
+        "tools/install.ps1"
       ]
     },
     "runtime.any.System.Collections/4.0.11": {
@@ -21040,11 +21120,12 @@
         "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll"
       ]
     },
-    "Xamarin.Forms/2.3.1.114": {
-      "sha512": "gEUGBCLHSylRQfpzAwUzI9EuJ3UVlwo+BFXGUdeL+XW9HrAPB8FtcDZMK7/HBdywMxGDhEFwXCCSClyEsdrFvw==",
+    "Xamarin.Forms/2.3.2.127": {
+      "sha512": "5f//6Ot/zh9Rg9QksTKTA8iH5h+9GMLfA0M6aS9dVRq26ChIwmZlBCk6EETGQVSDx+yHZ5h/WHYfnwU08IriMg==",
       "type": "package",
+      "path": "Xamarin.Forms/2.3.2.127",
       "files": [
-        "Xamarin.Forms.2.3.1.114.nupkg.sha512",
+        "Xamarin.Forms.2.3.2.127.nupkg.sha512",
         "Xamarin.Forms.nuspec",
         "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10/ICSharpCode.Decompiler.dll",
         "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10/ICSharpCode.NRefactory.CSharp.dll",
@@ -21196,6 +21277,7 @@
         "lib/uap10.0/Xamarin.Forms.Core.xml",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP.pri",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/AutoSuggestStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsTextBoxStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/PageControl.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/Properties/Xamarin.Forms.Platform.UAP.rd.xml",
@@ -21243,11 +21325,12 @@
         "lib/wpa81/Xamarin.Forms.Xaml.xml"
       ]
     },
-    "Xamarin.Forms.Maps/2.3.1.114": {
-      "sha512": "ly4HoOaJN3ABnCvi0k2K/b6pW4JWFxzzYfaJSFf6cBZfFp9ipiQYwOb5WUamKkWpGDyUBl9ClmlNVoQiT4d7PQ==",
+    "Xamarin.Forms.Maps/2.3.2.127": {
+      "sha512": "0dSV+ZCCdEinSw0V76AapyfU9Hd4rn8vLZpFIFraCrd1935O1UhsbeBG8dcnIFzzSxGB+KcgvAO81uUePahB6w==",
       "type": "package",
+      "path": "Xamarin.Forms.Maps/2.3.2.127",
       "files": [
-        "Xamarin.Forms.Maps.2.3.1.114.nupkg.sha512",
+        "Xamarin.Forms.Maps.2.3.2.127.nupkg.sha512",
         "Xamarin.Forms.Maps.nuspec",
         "build/win81/ARM/Xamarin.Forms.Maps.WinRT.Tablet.dll",
         "build/win81/ARM/Xamarin.Forms.Maps.WinRT.Tablet.pri",
@@ -21311,8 +21394,9 @@
   "projectFileDependencyGroups": {
     "": [
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2",
-      "Xamarin.Forms >= 2.3.1.114",
-      "Xamarin.Forms.Maps >= 2.3.1.114"
+      "Newtonsoft.Json >= 9.0.1",
+      "Xamarin.Forms >= 2.3.2.127",
+      "Xamarin.Forms.Maps >= 2.3.2.127"
     ],
     "UAP,Version=v10.0": []
   }
