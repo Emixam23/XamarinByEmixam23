@@ -1,9 +1,9 @@
 ﻿using MapPinsProject.CustomControl;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using MapPinsProject.Page;
 
 namespace MapPinsProject.Models
 {
@@ -15,7 +15,7 @@ namespace MapPinsProject.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public static readonly BindableProperty AddressProperty =
-            BindableProperty.Create(nameof(Address), typeof(string), typeof(CustomPin), "",
+            BindableProperty.Create(nameof(Address), typeof(string), typeof(CustomPin), "", BindingMode.TwoWay,
                 propertyChanged: OnAddressPropertyChanged);
         public string Address
         {
@@ -25,7 +25,6 @@ namespace MapPinsProject.Models
         private static void OnAddressPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             (bindable as CustomPin).SetAddress(newValue as string);
-            Debug.WriteLine("Address property changed");
         }
         private async void SetAddress(string address)
         {
@@ -69,7 +68,7 @@ namespace MapPinsProject.Models
         }
 
         public static readonly BindableProperty LocationProperty =
-          BindableProperty.Create(nameof(Location), typeof(Position), typeof(CustomPin), new Position(),
+          BindableProperty.Create(nameof(Location), typeof(Position), typeof(CustomPin), new Position(Double.MaxValue, Double.MaxValue), BindingMode.TwoWay,
               propertyChanged: OnLocationPropertyChanged);
         public Position Location
         {
@@ -79,13 +78,11 @@ namespace MapPinsProject.Models
         private static async void OnLocationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             (bindable as CustomPin).SetLocation((Position)newValue);
-            Debug.WriteLine("Location property changed");
         }
 
         private void NotifyChanges()
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Address)));
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
+            (App.Current.MainPage as MainPage).PinsCollectionChanged();
         }
 
         public string Name { get; set; }
@@ -96,6 +93,7 @@ namespace MapPinsProject.Models
         public uint PinZoomVisibilityMaximumLimit { get; set; }
         public Point AnchorPoint { get; set; }
         public Action<CustomPin> PinClickedCallback { get; set; }
+        private bool hasALocation;
 
         public CustomPin(Position location)
         {
@@ -126,8 +124,6 @@ namespace MapPinsProject.Models
         public CustomPin()
         {
             setter = SetFrom.None;
-            Address = "";
-            Location = new Position();
             Name = "";
             Details = "";
             ImagePath = "";

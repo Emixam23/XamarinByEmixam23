@@ -1,12 +1,10 @@
 ﻿using MapPinsProject.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace MapPinsProject.Page
 {
@@ -25,41 +23,32 @@ namespace MapPinsProject.Page
         {
             base.BindingContext = this;
 
-            Debug.WriteLine("Intialization....");
-
             CustomPins = new ObservableCollection<CustomPin>()
             {
-                new CustomPin() { Address="4720 E Atherton Street, Long Beach", Details = "Famous city for race driver !", ImagePath = "CustomIconImage.png"},
+                new CustomPin() { Address = "4720 E Atherton Street, Long Beach", Details = "Famous city for race driver !", ImagePath = "CustomIconImage.png"},
                 new CustomPin() { Address = "Ruaudin", Details = "Where I'm coming from.", ImagePath = "CustomIconImage.png" },
                 new CustomPin() { Address = "Chelles", Details = "Someone there.", ImagePath = "CustomIconImage.png" },
                 new CustomPin() { Address = "Lille", Details = "Le nord..", ImagePath = "CustomIconImage.png" },
-                new CustomPin() { Address = "Limoges", Details = "I have been there ! :o", ImagePath = "CustomIconImage.png" },
-                new CustomPin() { Address = "Douarnenez", Details = "A trip..", ImagePath = "CustomIconImage.png" }
+                new CustomPin(new Position(33.789618, -118.137626)) { Address = "Appart Alvista", Details = "I have been there ! :o", ImagePath = "CustomIconImage.png" },
+                new CustomPin() { Address = "Rome, Italy", Details = "A trip..", ImagePath = "CustomIconImage.png" }
             };
-
-            Debug.WriteLine("Initialization done.");
 
             PinActionClicked = PinClickedCallback;
 
             PinsSize = Convert.ToUInt32(100);
 
             InitializeComponent();
-            Debug.WriteLine("Components done.");
-
-
-            Task.Run(() =>
-            {
-                Task.Delay(5000);
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomPins)));
-            });
         }
 
         private void PinClickedCallback(CustomPin customPinClicked)
         {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                Debug.WriteLine("{0}: {1}/{2}", customPinClicked.Address, customPinClicked.PinZoomVisibilityMinimumLimit, customPinClicked.PinZoomVisibilityMaximumLimit);
-            });
+            Debug.WriteLine("{0}: {1}/{2}", customPinClicked.Address, customPinClicked.PinZoomVisibilityMinimumLimit, customPinClicked.PinZoomVisibilityMaximumLimit);
+        }
+
+        public void PinsCollectionChanged()
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomPins)));
+            Debug.WriteLine("Updated !!!");
         }
     }
 }

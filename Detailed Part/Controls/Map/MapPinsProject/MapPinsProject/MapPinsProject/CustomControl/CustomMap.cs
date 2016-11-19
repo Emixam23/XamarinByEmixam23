@@ -17,7 +17,7 @@ namespace MapPinsProject.CustomControl
     public class CustomMap : Map
     {
         public static readonly BindableProperty CustomPinsProperty =
-            BindableProperty.Create(nameof(CustomPins), typeof(ObservableCollection<CustomPin>), typeof(CustomMap), null,
+            BindableProperty.Create(nameof(CustomPins), typeof(ObservableCollection<CustomPin>), typeof(CustomMap), null, BindingMode.TwoWay,
                 propertyChanged: OnCustomPinsPropertyChanged);
         public ObservableCollection<CustomPin> CustomPins
         {
@@ -175,7 +175,42 @@ namespace MapPinsProject.CustomControl
         }
         #endregion
 
-        #region
+        #region Additionnal static methods for Custom Renderer (avoid duplicated code)
+        public static void AddPinsToRendererMap(CustomMap customMap, Action addPins, Action<double> addPins_AboutPinLimitOfZoom)
+        {
+            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
+                addPins();
+            else
+            {
+                if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Kilometers)
+                {
+                    if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
+                        && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Kilometers <= customMap.PinZoomVisibilityMaximumLimit)
+                        addPins();
+                    else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
+                        addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Kilometers);
+                }
+                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Meters)
+                {
+                    if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
+                        && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Meters <= customMap.PinZoomVisibilityMaximumLimit)
+                        addPins();
+                    else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
+                        addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Meters);
+                }
+                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Miles)
+                {
+                    if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
+                        && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Miles <= customMap.PinZoomVisibilityMaximumLimit)
+                        addPins();
+                    else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
+                        addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Miles);
+                }
+            }
+        }
+        #endregion
+
+        #region Additionnal static methods for Google API functionnalities
         public async static Task<string> GetAddressName(Position position)
         {
             string url = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -215,7 +250,6 @@ namespace MapPinsProject.CustomControl
             }
             return (position);
         }
-
         private static async Task<JObject> GoogleAPIHttpRequest(string url, string additionnal_URL)
         {
             try
@@ -267,7 +301,6 @@ namespace MapPinsProject.CustomControl
         {
             CustomMap customMap = ((CustomMap)bindable);
 
-            Debug.WriteLine("Pins collection has changed");
             if (customMap.CameraFocusParameter == CameraFocusReference.OnPins)
             {
                 List<double> latitudes = new List<double>();
@@ -290,7 +323,6 @@ namespace MapPinsProject.CustomControl
 
                 customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
             }
-            Debug.WriteLine("Map pins collection setted !");
         }
         private class DistanceCalculation
         {

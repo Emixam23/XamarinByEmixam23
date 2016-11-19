@@ -4,16 +4,13 @@ using MapPinsProject.UWP.CustomRenderer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
-using Windows.Foundation;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls.Maps;
-using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.UWP;
 using Xamarin.Forms.Platform.UWP;
@@ -38,7 +35,7 @@ namespace MapPinsProject.UWP.CustomRenderer
                 nativeMap = Control as MapControl;
                 MapIconPinLinkDictionary = null;
                 nativeMap.MapElementClick += OnPinClicked;
-                UpdatePins();
+                //UpdatePins();
             }
         }
 
@@ -76,35 +73,7 @@ namespace MapPinsProject.UWP.CustomRenderer
                     else
                         MapIconPinLinkDictionary.Clear();
 
-                    if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
-                        addPins();
-                    else
-                    {
-                        if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Kilometers)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map 
-                                && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Kilometers <= customMap.PinZoomVisibilityMaximumLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Kilometers);
-                        }
-                        else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Meters)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
-                                && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Meters <= customMap.PinZoomVisibilityMaximumLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Meters);
-                        }
-                        else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Miles)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
-                                && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Miles <= customMap.PinZoomVisibilityMaximumLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Miles);
-                        }
-                    }
+                    CustomMap.AddPinsToRendererMap(customMap, addPins, addPins_AboutPinLimitOfZoom);
                 }
             }
         }
@@ -132,7 +101,8 @@ namespace MapPinsProject.UWP.CustomRenderer
         {
             // Image path null/empty throws an exception ;)
             if ((customMap.PinImagePathSource == CustomMap.ImagePathSourceType.FromMap && customMap.PinImagePath == "")
-                || (customMap.PinImagePathSource == CustomMap.ImagePathSourceType.FromPin && pin.ImagePath == ""))
+                || (customMap.PinImagePathSource == CustomMap.ImagePathSourceType.FromPin && pin.ImagePath == "")
+                || (pin.Location.Latitude == Double.MaxValue && pin.Location.Longitude == Double.MaxValue))
                 return;
 
             MapIcon mapIcon = new MapIcon()
