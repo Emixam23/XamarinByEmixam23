@@ -1,3 +1,4 @@
+using Android.Content.Res;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.Graphics;
@@ -7,10 +8,15 @@ using MapPinsProject.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
 using Xamarin.Forms.Platform.Android;
+using static Android.Gms.Maps.GoogleMap;
 
+[assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace MapPinsProject.Droid.CustomRenderer
 {
     /// <summary>
@@ -74,37 +80,12 @@ namespace MapPinsProject.Droid.CustomRenderer
                 if (customMap.CustomPins != null && customMap.CustomPins.Count > 0)
                 {
                     nativeMap.Clear();
-                    /*if (MapIconPinLinkDictionary == null)
-                        MapIconPinLinkDictionary = new Dictionary<MapIcon, CustomPin>();
+                    if (MarkerOptionsPinLinkDictionary == null)
+                        MarkerOptionsPinLinkDictionary = new Dictionary<Marker, CustomPin>();
                     else
-                        MapIconPinLinkDictionary.Clear();*/
+                        MarkerOptionsPinLinkDictionary.Clear();
 
-                    if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
-                        addPins();
-                    else
-                    {
-                        if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Kilometers)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Kilometers < customMap.PinZoomVisibilityLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Kilometers);
-                        }
-                        else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Meters)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Meters < customMap.PinZoomVisibilityLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Meters);
-                        }
-                        else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Miles)
-                        {
-                            if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map && customMap.ZoomLevel.Miles < customMap.PinZoomVisibilityLimit)
-                                addPins();
-                            else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
-                                addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Miles);
-                        }
-                    }
+                    CustomMap.AddPinsToRendererMap(customMap, addPins, addPins_AboutPinLimitOfZoom);
                 }
             }
         }
@@ -128,50 +109,90 @@ namespace MapPinsProject.Droid.CustomRenderer
         {
             foreach (CustomPin pin in customMap.CustomPins)
             {
-                if (currentZoom < pin.PinZoomVisibilityLimit)
+                if (currentZoom >= pin.PinZoomVisibilityMinimumLimit && currentZoom <= pin.PinZoomVisibilityMaximumLimit)
                 {
                     addMarker(pin);
                 }
             }
         }
 
+        /// <summary>
+        /// This function customize the native pin based on the custom pin instance/object and then add it to the native map.
+        /// </summary>
+        /// <param name="pin">Custom pin object instance to add to the map.</param>
         private async void addMarker(CustomPin pin)
         {
             MarkerOptions marker = new MarkerOptions();
 
-            marker.SetTitle(pin.Name);
-            marker.SetIcon(BitmapDescriptorFactory.fromBitmap(ResizeImage("file:///android_asset/" + pin.ImageSource, ((customMap.PinSizeSource == CustomMap.PinSizeSourceName.Pin) ? (pin.PinSize) : (customMap.PinSize)))));
-            marker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
+            marker.SetTitle(pin.Id);
+            marker.SetIcon(BitmapDescriptorFactory.FromBitmap(ResizeImage(pin.ImagePath, ((customMap.PinSizeSource == CustomMap.PinSizeSourceName.Pin) ? (pin.PinSize) : (customMap.PinSize)))));
+            marker.SetPosition(new LatLng(pin.Location.Latitude, pin.Location.Longitude));
             marker.Anchor((float)pin.AnchorPoint.X, (float)pin.AnchorPoint.Y);
 
             MarkerOptionsPinLinkDictionary.Add(nativeMap.AddMarker(marker), pin);
         }
 
         /// <summary>
-        /// This function only takes place on Android plateform. This function is the native callback called when the map is loaded.
+        /// Function called when a pin get clicked.
         /// </summary>
-        /// <param name="googleMap"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The element.</param>
+        private void OnPinClicked(object sender, MarkerClickEventArgs e)
+        {
+            var item = this.MarkerOptionsPinLinkDictionary.FirstOrDefault(i => i.Value.Id.Equals(e.Marker.Title));
+            CustomPin pin = item.Value;
+
+            if (customMap.PinClickedCallbackSource == CustomMap.PinClickedCallbackSourceEnum.Map)
+                customMap.PinClickedCallback(pin);
+            else
+                pin.PinClickedCallback(pin);
+        }
+
+        #region Additional functions
+        /// <summary>
+        /// This function only takes place on Android plateform.
+        /// This function is the native callback called when the map is loaded.
+        /// </summary>
+        /// <param name="googleMap">The native map instance.</param>
         public void OnMapReady(GoogleMap googleMap)
         {
             this.nativeMap = googleMap;
             googleMap.UiSettings.ZoomControlsEnabled = false;
-
+            nativeMap.MarkerClick += OnPinClicked;
+            nativeMap.CameraChange += OnCameraChanged;
+            customMap.ZoomLevel = new Distance(googleMap.CameraPosition.Zoom);
+            customMap.MapLoaded();
             UpdatePins();
         }
-
-        #region Additional functions
+        /// <summary>
+        /// Function called each time the user moves the camera.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The camera.</param>
+        private void OnCameraChanged(object sender, CameraChangeEventArgs e)
+        {
+            customMap.ZoomLevel = new Distance(e.Position.Zoom);
+        }
+        /// <summary>
+        /// Create a bitmap image from a given source and a given scale.
+        /// </summary>
+        /// <param name="imageSource">The image source string.</param>
+        /// <param name="scale">The image size uint.</param>
+        /// <returns>Return a Bitmap image created from a source string and scaled about the parameter scale.</returns>
         private Bitmap ResizeImage(string imageSource, uint scale)
         {
-            Uri uri = new Uri(imageSource);
+            AssetManager assetManager = MainActivity.MyAssets;
+            Stream str;
+            Bitmap bitmap = null;
 
-            Bitmap source = new Bitmap();
-            source.BeginInit();
-            source.UriSource = uri;
-            source.DecodePixelHeight = scale;
-            source.DecodePixelWidth = scale;
-            source.EndInit();
+            int markerSize = Convert.ToInt32(scale) * 2;
 
-            return source;
+            str = assetManager.Open("Pin/" + imageSource);
+
+            bitmap = BitmapFactory.DecodeStream(str);
+            bitmap = Bitmap.CreateScaledBitmap(bitmap, markerSize, markerSize, false);
+
+            return bitmap;
         }
         #endregion
     }

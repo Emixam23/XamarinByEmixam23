@@ -6,7 +6,7 @@
   
   <ContentPage.Content>
     <AbsoluteLayout>
-      <control:Gif GifSource="Gif/example.gif"
+      <control:Gif GifSource="Gif/CityBackgroundWithSeaFront.gif"
                    AbsoluteLayout.LayoutBounds="0.5, 0.5, 1, 1"
                    AbsoluteLayout.LayoutFlags="All"/>
     </AbsoluteLayout>

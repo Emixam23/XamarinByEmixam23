@@ -5,6 +5,10 @@ namespace MapPinsProject
 {
     public class App : Application
     {
+        /// <summary>
+        /// Public Google API Key for the whole application.
+        /// It's mandatory for the map function of lat/lng finder or address reverser.
+        /// </summary>
         public static readonly string GOOGLE_MAP_API_KEY = "YOUR_API_KEY";
 
         public App()

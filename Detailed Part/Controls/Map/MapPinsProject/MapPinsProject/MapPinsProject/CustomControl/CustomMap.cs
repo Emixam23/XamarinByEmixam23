@@ -14,67 +14,109 @@ using Xamarin.Forms.Maps;
 
 namespace MapPinsProject.CustomControl
 {
-    public class CustomMap : Map
+    public class CustomMap : Map, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Handler for event of updating or changing the 
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Pins collection property.
+        /// </summary>
         public static readonly BindableProperty CustomPinsProperty =
             BindableProperty.Create(nameof(CustomPins), typeof(ObservableCollection<CustomPin>), typeof(CustomMap), null, BindingMode.TwoWay,
                 propertyChanged: OnCustomPinsPropertyChanged);
+        /// <summary>
+        /// Assessor for CustomPins property.
+        /// </summary>
         public ObservableCollection<CustomPin> CustomPins
         {
             get { return (ObservableCollection<CustomPin>)GetValue(CustomPinsProperty); }
             set { SetValue(CustomPinsProperty, value); }
         }
 
-        public static readonly BindableProperty CameraFocusProperty =
-            BindableProperty.Create(nameof(CameraFocus), typeof(CameraFocusData), typeof(CustomMap), null);
-        public CameraFocusData CameraFocus
-        {
-            get { return (CameraFocusData)GetValue(CameraFocusProperty); }
-            set { SetValue(CameraFocusProperty, value); }
-        }
-
+        /// <summary>
+        /// Camera focus reference enumerator.
+        /// </summary>
         public enum CameraFocusReference
         {
             None,
             OnPins
         }
+
+        /// <summary>
+        /// Camera focus parameter property.
+        /// </summary>
         public static readonly BindableProperty CameraFocusParameterProperty =
             BindableProperty.Create(nameof(CameraFocusParameter), typeof(CameraFocusReference), typeof(CustomMap), CameraFocusReference.None);
+
+        /// <summary>
+        /// Assessor for CameraFocusParameter property.
+        /// </summary>
         public CameraFocusReference CameraFocusParameter
         {
             get { return (CameraFocusReference)GetValue(CameraFocusParameterProperty); }
             set { SetValue(CameraFocusParameterProperty, value); }
         }
 
+        /// <summary>
+        /// Global pin size property.
+        /// </summary>
         public static readonly BindableProperty PinSizeProperty =
             BindableProperty.Create(nameof(PinSize), typeof(uint), typeof(CustomMap), Convert.ToUInt32(50));
+
+        /// <summary>
+        /// Assessor for PinSize property.
+        /// </summary>
         public uint PinSize
         {
             get { return (uint)GetValue(PinSizeProperty); }
             set { SetValue(PinSizeProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's size source name enumerator.
+        /// </summary>
         public enum PinSizeSourceName
         {
             Map,
             Pin
         }
+
+        /// <summary>
+        /// Pin's size source property.
+        /// </summary>
         public static readonly BindableProperty PinSizeSourceProperty =
             BindableProperty.Create(nameof(PinSizeSource), typeof(PinSizeSourceName), typeof(CustomMap), PinSizeSourceName.Map);
+
+        /// <summary>
+        /// Assessor for PinSizeSource property.
+        /// </summary>
         public PinSizeSourceName PinSizeSource
         {
             get { return (PinSizeSourceName)GetValue(PinSizeSourceProperty); }
             set { SetValue(PinSizeSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's image path property.
+        /// </summary>
         public static readonly BindableProperty PinImagePathProperty =
             BindableProperty.Create(nameof(PinImagePath), typeof(string), typeof(CustomMap), "");
+
+        /// <summary>
+        /// Assessor for PinImagePath property.
+        /// </summary>
         public string PinImagePath
         {
             get { return (string)GetValue(PinImagePathProperty); }
             set { SetValue(PinImagePathProperty, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public enum ImagePathSourceType
         {
             FromMap,
@@ -169,9 +211,10 @@ namespace MapPinsProject.CustomControl
                 CustomMap map = sender as CustomMap;
                 if (map.VisibleRegion != null)
                 {
-                    this.ZoomLevel = (map.VisibleRegion.Radius);
+                    this.ZoomLevel = map.VisibleRegion.Radius;
                 }
             };
+            isMapLoaded = false;
         }
         #endregion
 
@@ -208,10 +251,20 @@ namespace MapPinsProject.CustomControl
                 }
             }
         }
+        private bool isMapLoaded;
+        public void MapLoaded()
+        {
+            isMapLoaded = true;
+            if (this.VisibleRegion != null)
+            {
+                this.ZoomLevel = this.VisibleRegion.Radius;
+            }
+            CustomMap.OnCustomPinsPropertyChanged(this, null, CustomPins);
+        }
         #endregion
 
         #region Additionnal static methods for Google API functionnalities
-        public async static Task<string> GetAddressName(Position position)
+        public static async Task<string> GetAddressName(Position position)
         {
             string url = "https://maps.googleapis.com/maps/api/geocode/json";
             string additionnal_URL = "?latlng=" + position.Latitude + "," + position.Longitude
@@ -230,7 +283,7 @@ namespace MapPinsProject.CustomControl
             }
             return (address_name);
         }
-        public async static Task<Position> GetAddressPosition(string name)
+        public static async Task<Position> GetAddressPosition(string name)
         {
             string url = "https://maps.googleapis.com/maps/api/geocode/json";
             string additionnal_URL = "?address=" + name
@@ -246,7 +299,7 @@ namespace MapPinsProject.CustomControl
             }
             catch (Exception)
             {
-                position = new Position();
+                position = new Position(Double.MaxValue, Double.MaxValue);
             }
             return (position);
         }
@@ -300,29 +353,38 @@ namespace MapPinsProject.CustomControl
         private static void OnCustomPinsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             CustomMap customMap = ((CustomMap)bindable);
-
-            if (customMap.CameraFocusParameter == CameraFocusReference.OnPins)
+            Debug.WriteLine("on pass");
+            if (customMap.isMapLoaded && newValue != null)
             {
-                List<double> latitudes = new List<double>();
-                List<double> longitudes = new List<double>();
-
-                foreach (CustomPin pin in (newValue as ObservableCollection<CustomPin>))
+                if (customMap.CameraFocusParameter == CameraFocusReference.OnPins)
                 {
-                    latitudes.Add(pin.Location.Latitude);
-                    longitudes.Add(pin.Location.Longitude);
+                    List<double> latitudes = new List<double>();
+                    List<double> longitudes = new List<double>();
+
+                    ObservableCollection<CustomPin> pinsCollection = newValue as ObservableCollection<CustomPin>;
+                    foreach (CustomPin pin in pinsCollection)
+                    {
+                        if (pin.Location.Latitude != Double.MaxValue)
+                        {
+                            latitudes.Add(pin.Location.Latitude);
+                            longitudes.Add(pin.Location.Longitude);
+                        }
+                    }
+
+                    double lowestLat = latitudes.Min();
+                    double highestLat = latitudes.Max();
+                    double lowestLong = longitudes.Min();
+                    double highestLong = longitudes.Max();
+                    double finalLat = (lowestLat + highestLat) / 2;
+                    double finalLong = (lowestLong + highestLong) / 2;
+
+                    double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
+                    customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
+                    Debug.WriteLine("customMap.CameraFocusParameter == CameraFocusReference.OnPins");
                 }
-
-                double lowestLat = latitudes.Min();
-                double highestLat = latitudes.Max();
-                double lowestLong = longitudes.Min();
-                double highestLong = longitudes.Max();
-                double finalLat = (lowestLat + highestLat) / 2;
-                double finalLong = (lowestLong + highestLong) / 2;
-
-                double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
-
-                customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
+                Debug.WriteLine("outside");
             }
+            Debug.WriteLine("on sort");
         }
         private class DistanceCalculation
         {
@@ -347,7 +409,6 @@ namespace MapPinsProject.CustomControl
                     return radius * 2 * Math.Asin(Math.Min(1, Math.Sqrt((Math.Pow(Math.Sin((DiffRadian(lat1, lat2)) / 2.0), 2.0) + Math.Cos(ToRadian(lat1)) * Math.Cos(ToRadian(lat2)) * Math.Pow(Math.Sin((DiffRadian(lng1, lng2)) / 2.0), 2.0)))));
                 }
             }
-
             public enum GeoCodeCalcMeasurement : int
             {
                 Miles = 0,

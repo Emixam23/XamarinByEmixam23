@@ -25,30 +25,29 @@ namespace MapPinsProject.Page
 
             CustomPins = new ObservableCollection<CustomPin>()
             {
-                new CustomPin() { Address = "4720 E Atherton Street, Long Beach", Details = "Famous city for race driver !", ImagePath = "CustomIconImage.png"},
-                new CustomPin() { Address = "Ruaudin", Details = "Where I'm coming from.", ImagePath = "CustomIconImage.png" },
-                new CustomPin() { Address = "Chelles", Details = "Someone there.", ImagePath = "CustomIconImage.png" },
-                new CustomPin() { Address = "Lille", Details = "Le nord..", ImagePath = "CustomIconImage.png" },
-                new CustomPin(new Position(33.789618, -118.137626)) { Address = "Appart Alvista", Details = "I have been there ! :o", ImagePath = "CustomIconImage.png" },
-                new CustomPin() { Address = "Rome, Italy", Details = "A trip..", ImagePath = "CustomIconImage.png" }
+                new CustomPin() { Id = "a", Address = "California State University Long Beach", Details = "My University !", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 75, PinZoomVisibilityMinimumLimit = 20, PinSize = 50},
+                new CustomPin() { Id = "b", Address = "Ruaudin", Details = "Where I'm coming from.", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 75, PinZoomVisibilityMinimumLimit = 35, PinSize = 35},
+                new CustomPin() { Id = "c", Address = "Chelles", Details = "Someone there.", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 75, PinZoomVisibilityMinimumLimit = 0, PinSize = 65 },
+                new CustomPin() { Id = "d", Address = "Lille", Details = "Le nord..", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 100, PinZoomVisibilityMinimumLimit = 20, PinSize = 80 },
+                new CustomPin(new Position(33.789618, -118.137626)) { Id = "e", Details = "I have been there ! :o", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 100, PinZoomVisibilityMinimumLimit = 20, PinSize = 40 },
+                new CustomPin() { Id = "f", Address = "Rome, Italy", Details = "A trip..", ImagePath = "CustomIconImage.png", PinZoomVisibilityMaximumLimit = 100, PinZoomVisibilityMinimumLimit = 50, PinSize = 55 }
             };
 
             PinActionClicked = PinClickedCallback;
 
-            PinsSize = Convert.ToUInt32(100);
+            PinsSize = Convert.ToUInt32(200);
 
             InitializeComponent();
         }
 
         private void PinClickedCallback(CustomPin customPinClicked)
         {
-            Debug.WriteLine("{0}: {1}/{2}", customPinClicked.Address, customPinClicked.PinZoomVisibilityMinimumLimit, customPinClicked.PinZoomVisibilityMaximumLimit);
+            Debug.WriteLine("{0}: {1}/{2}", customPinClicked.Address, customPinClicked.Location.Latitude, customPinClicked.Location.Longitude);
         }
 
         public void PinsCollectionChanged()
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomPins)));
-            Debug.WriteLine("Updated !!!");
         }
     }
 }

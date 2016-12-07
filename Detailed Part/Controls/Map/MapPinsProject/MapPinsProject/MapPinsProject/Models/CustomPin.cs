@@ -94,6 +94,7 @@ namespace MapPinsProject.Models
         public Point AnchorPoint { get; set; }
         public Action<CustomPin> PinClickedCallback { get; set; }
         private bool hasALocation;
+        public string Id { get; set; }
 
         public CustomPin(Position location)
         {
@@ -107,6 +108,7 @@ namespace MapPinsProject.Models
             PinZoomVisibilityMaximumLimit = uint.MaxValue;
             AnchorPoint = new Point(0.5, 1);
             PinClickedCallback = null;
+            Id = "";
         }
         public CustomPin(string address)
         {
@@ -120,6 +122,7 @@ namespace MapPinsProject.Models
             PinZoomVisibilityMaximumLimit = uint.MaxValue;
             AnchorPoint = new Point(0.5, 1);
             PinClickedCallback = null;
+            Id = "";
         }
         public CustomPin()
         {
@@ -132,6 +135,7 @@ namespace MapPinsProject.Models
             PinZoomVisibilityMaximumLimit = uint.MaxValue;
             AnchorPoint = new Point(0.5, 1);
             PinClickedCallback = null;
+            Id = "";
         }
     }
 }
