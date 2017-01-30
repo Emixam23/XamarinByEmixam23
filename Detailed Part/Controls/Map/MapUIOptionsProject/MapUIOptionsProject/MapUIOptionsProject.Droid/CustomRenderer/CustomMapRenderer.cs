@@ -64,9 +64,15 @@ namespace MapUIOptionsProject.Droid.CustomRenderer
         private void UpdateUIOptions()
         {
             if (customMap.IsUIOptionsEnable)
-                map.UiSettings.ZoomControlsEnabled = true;
+            {
+                nativeMap.UiSettings.ZoomControlsEnabled = true;
+                nativeMap.UiSettings.MyLocationButtonEnabled = true;
+            }
             else
-                map.UiSettings.ZoomControlsEnabled = false;
+            {
+                nativeMap.UiSettings.ZoomControlsEnabled = false;
+                nativeMap.UiSettings.MyLocationButtonEnabled = false;
+            }
         }
 
         /// <summary>
