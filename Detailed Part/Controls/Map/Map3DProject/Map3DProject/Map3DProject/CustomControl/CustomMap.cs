@@ -7,13 +7,13 @@ namespace Map3DProject.CustomControl
     public class CustomMap : Map
     {
         /// <summary>
-        /// This IList<string> is containing all of the address given by the user to create the polyline.
+        /// Just for my test since I can't find the way to find the current location of the camera
         /// </summary>
         public static readonly BindableProperty LocationProperty =
             BindableProperty.Create(nameof(Location), typeof(Position), typeof(CustomMap), new Position(47.942660, 0.261979));
 
         /// <summary>
-        /// Assessor for PolylineAddressPoints property.
+        /// Assessor for Location property.
         /// </summary>
         public Position Location
         {
@@ -21,8 +21,15 @@ namespace Map3DProject.CustomControl
             set { SetValue(LocationProperty, value); }
         }
 
+        /// <summary>
+        /// Just for my test since I can't find the way to get the current zoom level
+        /// </summary>
         public static readonly BindableProperty ZoomLevelProperty =
             BindableProperty.Create(nameof(ZoomLevel), typeof(Distance), typeof(CustomMap), new Distance());
+            
+        /// <summary>
+        /// Assessor for ZoomLevel property.
+        /// </summary>  
         public Distance ZoomLevel
         {
             get { return (Distance)GetValue(ZoomLevelProperty); }
@@ -46,6 +53,9 @@ namespace Map3DProject.CustomControl
 
         #region Additionnals
         private bool isMapLoaded;
+        /// <summary>
+        /// Method called from the renderer once the map is loaded
+        /// </summary> 
         public void MapLoaded()
         {
             isMapLoaded = true;
