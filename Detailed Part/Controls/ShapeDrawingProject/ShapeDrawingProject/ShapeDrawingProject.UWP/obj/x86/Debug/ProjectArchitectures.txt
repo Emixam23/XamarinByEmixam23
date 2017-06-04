@@ -1,2 +1,0 @@
-C:\XamarinByEmixam23\Detailed Part\Controls\ShapeDrawingProject\ShapeDrawingProject\ShapeDrawingProject.UWP\ShapeDrawingProject.UWP.csproj;x86
-C:\XamarinByEmixam23\Detailed Part\Controls\ShapeDrawingProject\ShapeDrawingProject\ShapeDrawingProject\ShapeDrawingProject.csproj;neutral

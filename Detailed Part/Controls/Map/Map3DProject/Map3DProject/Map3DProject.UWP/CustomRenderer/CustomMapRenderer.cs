@@ -73,17 +73,19 @@ namespace Map3DProject.UWP.CustomRenderer
                 try
                 {
                     // Set the aerial 3D view.
-                    nativeMap.Style = MapStyle.Aerial3DWithRoads;
+                    //nativeMap.Style = MapStyle.Aerial3DWithRoads;
 
                     // Specify the location.
-                    BasicGeoposition hwGeoposition = new BasicGeoposition() { Latitude = customMap.VisibleRegion.LatitudeDegrees, Longitude = customMap.VisibleRegion.LongitudeDegrees };
+                    /*BasicGeoposition hwGeoposition = new BasicGeoposition() { Latitude = customMap.VisibleRegion.LatitudeDegrees, Longitude = customMap.VisibleRegion.LongitudeDegrees };
                     Geopoint hwPoint = new Geopoint(hwGeoposition);
                     // Create the map scene.
                     MapScene hwScene = MapScene.CreateFromLocationAndRadius(hwPoint,
                                                                                          80, //show this many meters around
                                                                                          0, //looking at it to the North
-                                                                                         60); //degrees pitch
-                                                                                        
+                                                                                         60); //degrees pitch*/
+
+                    MapScene hwScene = MapScene.CreateFromCamera(nativeMap.ActualCamera);
+
                     // Set the 3D view with animation.
                     await nativeMap.TrySetSceneAsync(hwScene, MapAnimationKind.Bow);
                 } catch (Exception e)
