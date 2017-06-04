@@ -1,5 +1,5 @@
-﻿using MapPolylineProject.CustomControl;
-using NightLine.UWP.CustomRenderers;
+using MapPolylineProject.CustomControl;
+using MapPolylineProject.UWP.CustomRenderers;
 using System.Collections.Generic;
 using Windows.Devices.Geolocation;
 using Windows.UI;
