@@ -163,6 +163,7 @@ namespace MapPinsProject.Droid.CustomRenderer
             customMap.ZoomLevel = new Distance(googleMap.CameraPosition.Zoom);
             customMap.MapLoaded();
             UpdatePins();
+            //customMap.UpdateCamera();
         }
         /// <summary>
         /// Function called each time the user moves the camera.

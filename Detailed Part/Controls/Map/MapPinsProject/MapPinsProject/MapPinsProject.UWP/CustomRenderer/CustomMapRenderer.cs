@@ -4,6 +4,7 @@ using MapPinsProject.UWP.CustomRenderer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
@@ -53,10 +54,11 @@ namespace MapPinsProject.UWP.CustomRenderer
                 nativeMap = Control as MapControl;
                 MapIconPinLinkDictionary = null;
                 nativeMap.MapElementClick += OnPinClicked;
-                UpdatePins();
                 nativeMap.Loaded += ((sender, re) =>
                 {
                     customMap.MapLoaded();
+                    //customMap.UpdateCamera();
+                    UpdatePins();
                 });
             }
         }
@@ -74,7 +76,10 @@ namespace MapPinsProject.UWP.CustomRenderer
                 return;
 
             if (e.PropertyName == CustomMap.CustomPinsProperty.PropertyName || e.PropertyName == CustomMap.ZoomLevelProperty.PropertyName)
+            {
+                Debug.WriteLine("Zoom = {0}km", customMap.ZoomLevel.Kilometers);
                 UpdatePins();
+            }
         }
 
         /// <summary>

@@ -22,7 +22,7 @@
     -Generally, the assembly is the name of your project.
     -->
     <control:CustomMap x:Name="MapTest" CustomPins="{Binding CustomPins}" 
-                       CameraFocusParameter="OnPins" PinImagePath="CustomIconImage.png"
+                       PinImagePath="CustomIconImage.png"
                        PinSizeSource="Pin"
                        PinClickedCallback="{Binding PinActionClicked}"
                        VerticalOptions="Fill" HorizontalOptions="Fill"/>
@@ -30,3 +30,4 @@
 
 </ContentPage>
 
+<!--  CameraFocusParameter="OnPins" -->

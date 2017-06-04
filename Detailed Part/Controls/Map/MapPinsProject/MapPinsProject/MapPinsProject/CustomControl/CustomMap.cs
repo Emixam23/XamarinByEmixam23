@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -19,7 +18,7 @@ namespace MapPinsProject.CustomControl
         /// <summary>
         /// Handler for event of updating or changing the 
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        new public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Pins collection property.
@@ -27,6 +26,7 @@ namespace MapPinsProject.CustomControl
         public static readonly BindableProperty CustomPinsProperty =
             BindableProperty.Create(nameof(CustomPins), typeof(ObservableCollection<CustomPin>), typeof(CustomMap), null, BindingMode.TwoWay,
                 propertyChanged: OnCustomPinsPropertyChanged);
+
         /// <summary>
         /// Assessor for CustomPins property.
         /// </summary>
@@ -49,7 +49,7 @@ namespace MapPinsProject.CustomControl
         /// Camera focus parameter property.
         /// </summary>
         public static readonly BindableProperty CameraFocusParameterProperty =
-            BindableProperty.Create(nameof(CameraFocusParameter), typeof(CameraFocusReference), typeof(CustomMap), CameraFocusReference.None);
+            BindableProperty.Create(nameof(CameraFocusParameter), typeof(CameraFocusReference), typeof(CustomMap), CameraFocusReference.OnPins);
 
         /// <summary>
         /// Assessor for CameraFocusParameter property.
@@ -115,88 +115,156 @@ namespace MapPinsProject.CustomControl
         }
 
         /// <summary>
-        /// 
+        /// Image path source enumerator.
         /// </summary>
         public enum ImagePathSourceType
         {
             FromMap,
             FromPin
         }
+        /// <summary>
+        /// Pin image path source property.
+        /// </summary>
         public static readonly BindableProperty PinImagePathSourceProperty =
             BindableProperty.Create(nameof(PinImagePathSource), typeof(ImagePathSourceType), typeof(CustomMap), ImagePathSourceType.FromMap);
+
+        /// <summary>
+        /// Assessor for PinImagePathSource property.
+        /// </summary>
         public ImagePathSourceType PinImagePathSource
         {
             get { return (ImagePathSourceType)GetValue(PinImagePathSourceProperty); }
             set { SetValue(PinImagePathSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Zoom level property.
+        /// </summary>
         public static readonly BindableProperty ZoomLevelProperty =
             BindableProperty.Create(nameof(ZoomLevel), typeof(Distance), typeof(CustomMap), new Distance());
+
+        /// <summary>
+        /// Assessor for ZoomLevel property.
+        /// </summary>
         public Distance ZoomLevel
         {
             get { return (Distance)GetValue(ZoomLevelProperty); }
             set { SetValue(ZoomLevelProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's zoom visibility Maximum limit property.
+        /// </summary>
         public static readonly BindableProperty PinZoomVisibilityMaximumLimitProperty =
             BindableProperty.Create(nameof(PinZoomVisibilityMaximumLimit), typeof(uint), typeof(CustomMap), UInt32.MaxValue);
+
+        /// <summary>
+        /// Assessor for PinZoomVisibilityMaximumLimit property.
+        /// </summary>
         public uint PinZoomVisibilityMaximumLimit
         {
             get { return (uint)GetValue(PinZoomVisibilityMaximumLimitProperty); }
             set { SetValue(PinZoomVisibilityMaximumLimitProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's zoom visibility Minimum limit property.
+        /// </summary>
         public static readonly BindableProperty PinZoomVisibilityMinimumLimitProperty =
             BindableProperty.Create(nameof(PinZoomVisibilityMinimumLimit), typeof(uint), typeof(CustomMap), UInt32.MinValue);
+
+        /// <summary>
+        /// Assessor for PinZoomVisibilityMinimumLimit property.
+        /// </summary>
         public uint PinZoomVisibilityMinimumLimit
         {
             get { return (uint)GetValue(PinZoomVisibilityMinimumLimitProperty); }
             set { SetValue(PinZoomVisibilityMinimumLimitProperty, value); }
         }
 
-        public enum PinZoomVisibilityLimitUnityName
+        /// <summary>
+        /// Pin's zoom visibility limit unity enumerator. 
+        /// </summary>
+        public enum PinZoomVisibilityLimitUnityEnum
         {
             Kilometers,
             Meters,
             Miles
         }
+
+        /// <summary>
+        /// Pin's zoom visibility limit unity property.
+        /// </summary>
         public static readonly BindableProperty PinZoomVisibilityLimitUnityProperty =
-            BindableProperty.Create(nameof(PinZoomVisibilityLimitUnity), typeof(PinZoomVisibilityLimitUnityName), typeof(CustomMap), PinZoomVisibilityLimitUnityName.Kilometers);
-        public PinZoomVisibilityLimitUnityName PinZoomVisibilityLimitUnity
+            BindableProperty.Create(nameof(PinZoomVisibilityLimitUnity), typeof(PinZoomVisibilityLimitUnityEnum), typeof(CustomMap), PinZoomVisibilityLimitUnityEnum.Kilometers);
+
+        /// <summary>
+        /// Assessor for PinZoomVisibilityLimitUnity property.
+        /// </summary>
+        public PinZoomVisibilityLimitUnityEnum PinZoomVisibilityLimitUnity
         {
-            get { return (PinZoomVisibilityLimitUnityName)GetValue(PinZoomVisibilityLimitUnityProperty); }
+            get { return (PinZoomVisibilityLimitUnityEnum)GetValue(PinZoomVisibilityLimitUnityProperty); }
             set { SetValue(PinZoomVisibilityLimitUnityProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's zoom visibility limit source enumerator.
+        /// </summary>
         public enum PinZoomVisibilityLimitSourceEnum
         {
             Map,
             None,
             Pin
         }
+
+        /// <summary>
+        /// Pin's zoom visibility limit source property.
+        /// </summary>
         public static readonly BindableProperty PinZoomVisibilityLimitSourceProperty =
             BindableProperty.Create(nameof(PinZoomVisibilityLimitSource), typeof(PinZoomVisibilityLimitSourceEnum), typeof(CustomMap), PinZoomVisibilityLimitSourceEnum.None);
+
+        /// <summary>
+        /// Assessor for PinZoomVisibilityLimitSource property.
+        /// </summary>
         public PinZoomVisibilityLimitSourceEnum PinZoomVisibilityLimitSource
         {
             get { return (PinZoomVisibilityLimitSourceEnum)GetValue(PinZoomVisibilityLimitSourceProperty); }
             set { SetValue(PinZoomVisibilityLimitSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's clicked callback property.
+        /// </summary>
         public static readonly BindableProperty PinClickedCallbackProperty =
             BindableProperty.Create(nameof(PinClickedCallback), typeof(Action<CustomPin>), typeof(CustomMap), null);
+
+        /// <summary>
+        /// Assessor for PinClickedCallback property.
+        /// </summary>
         public Action<CustomPin> PinClickedCallback
         {
             get { return (Action<CustomPin>)GetValue(PinClickedCallbackProperty); }
             set { SetValue(PinClickedCallbackProperty, value); }
         }
 
+        /// <summary>
+        /// Pin's clicked callback source enumerator.
+        /// </summary>
         public enum PinClickedCallbackSourceEnum
         {
             Map,
             Pins
         }
+
+        /// <summary>
+        /// Pin's clicked callback source property.
+        /// </summary>
         public static readonly BindableProperty PinClickedCallbackSourceProperty =
             BindableProperty.Create(nameof(PinClickedCallbackSource), typeof(PinClickedCallbackSourceEnum), typeof(CustomMap), PinClickedCallbackSourceEnum.Map);
+
+        /// <summary>
+        /// Assessor for PinClickedCallbackSource property.
+        /// </summary>
         public PinClickedCallbackSourceEnum PinClickedCallbackSource
         {
             get { return (PinClickedCallbackSourceEnum)GetValue(PinClickedCallbackSourceProperty); }
@@ -204,8 +272,12 @@ namespace MapPinsProject.CustomControl
         }
 
         #region Constructor
+        /// <summary>
+        /// Contructor
+        /// </summary>
         public CustomMap()
         {
+            isMapLoaded = false;
             this.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
             {
                 CustomMap map = sender as CustomMap;
@@ -214,18 +286,24 @@ namespace MapPinsProject.CustomControl
                     this.ZoomLevel = map.VisibleRegion.Radius;
                 }
             };
-            isMapLoaded = false;
         }
         #endregion
 
         #region Additionnal static methods for Custom Renderer (avoid duplicated code)
+        /// <summary>
+        /// This method has been made to avoid the duplication of code for each renderer.
+        /// It allows us, based on some internal/given parameters, to add the pins by "normal adding" function or a "special adding" one.
+        /// </summary>
+        /// <param name="customMap">The instance of the Custom Map object.</param>
+        /// <param name="addPins">The normal function to add a pin.</param>
+        /// <param name="addPins_AboutPinLimitOfZoom">The special function to add a pin.</param>
         public static void AddPinsToRendererMap(CustomMap customMap, Action addPins, Action<double> addPins_AboutPinLimitOfZoom)
         {
             if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.None)
                 addPins();
             else
             {
-                if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Kilometers)
+                if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityEnum.Kilometers)
                 {
                     if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
                         && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Kilometers <= customMap.PinZoomVisibilityMaximumLimit)
@@ -233,7 +311,7 @@ namespace MapPinsProject.CustomControl
                     else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
                         addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Kilometers);
                 }
-                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Meters)
+                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityEnum.Meters)
                 {
                     if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
                         && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Meters <= customMap.PinZoomVisibilityMaximumLimit)
@@ -241,7 +319,7 @@ namespace MapPinsProject.CustomControl
                     else if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Pin)
                         addPins_AboutPinLimitOfZoom(customMap.ZoomLevel.Meters);
                 }
-                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityName.Miles)
+                else if (customMap.PinZoomVisibilityLimitUnity == CustomMap.PinZoomVisibilityLimitUnityEnum.Miles)
                 {
                     if (customMap.PinZoomVisibilityLimitSource == CustomMap.PinZoomVisibilityLimitSourceEnum.Map
                         && customMap.ZoomLevel.Kilometers >= customMap.PinZoomVisibilityMinimumLimit && customMap.ZoomLevel.Miles <= customMap.PinZoomVisibilityMaximumLimit)
@@ -251,7 +329,13 @@ namespace MapPinsProject.CustomControl
                 }
             }
         }
+        /// <summary>
+        /// Boolean which defines if the map is full load or not.
+        /// </summary>
         private bool isMapLoaded;
+        /// <summary>
+        /// Set the isMapLoaded boolean to true and set some values. This function is called from the renderer when the map is full loaded.
+        /// </summary>
         public void MapLoaded()
         {
             isMapLoaded = true;
@@ -259,11 +343,61 @@ namespace MapPinsProject.CustomControl
             {
                 this.ZoomLevel = this.VisibleRegion.Radius;
             }
-            CustomMap.OnCustomPinsPropertyChanged(this, null, CustomPins);
+            UpdateCamera();
+        }
+        /// <summary>
+        /// Update the camera focus based on the CameraFocus property.
+        /// </summary>
+        public void UpdateCamera()
+        {
+            if (this.isMapLoaded)
+            {
+                if (this.CameraFocusParameter == CameraFocusReference.OnPins && CustomPins != null)
+                {
+                    List<double> latitudes = new List<double>();
+                    List<double> longitudes = new List<double>();
+
+                    foreach (CustomPin pin in CustomPins)
+                    {
+                        if (pin.Location.Latitude != Double.MaxValue)
+                        {
+                            latitudes.Add(pin.Location.Latitude);
+                            longitudes.Add(pin.Location.Longitude);
+                        }
+                    }
+
+                    double lowestLat = latitudes.Min();
+                    double highestLat = latitudes.Max();
+                    double lowestLong = longitudes.Min();
+                    double highestLong = longitudes.Max();
+                    double finalLat = (lowestLat + highestLat) / 2;
+                    double finalLong = (lowestLong + highestLong) / 2;
+
+                    double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
+
+                    //If the value is too high, then on UWP it throws an uncatchable exception...
+                    if ((finalLat < Double.MaxValue && finalLat > Double.MinValue)
+                        && (finalLong < Double.MaxValue && finalLong > Double.MinValue)
+                        && (distance < Double.MaxValue && distance > Double.MinValue))
+                    {
+                        try
+                        {
+                            this.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
+                            return;
+                        }
+                        catch (Exception) { }
+                    }
+                }
+            }
         }
         #endregion
 
         #region Additionnal static methods for Google API functionnalities
+        /// <summary>
+        /// Get the address of the Lat/Long position by using Google API.
+        /// </summary>
+        /// <param name="position">Lat/Long reference.</param>
+        /// <returns>The address of the Lat/Long position parameter.</returns>
         public static async Task<string> GetAddressName(Position position)
         {
             string url = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -283,6 +417,11 @@ namespace MapPinsProject.CustomControl
             }
             return (address_name);
         }
+        /// <summary>
+        /// Get the Lat/Long of the address string by using Google API.
+        /// </summary>
+        /// <param name="name">Address reference.</param>
+        /// <returns>The Lat/Long of the address string parameter.</returns>
         public static async Task<Position> GetAddressPosition(string name)
         {
             string url = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -303,6 +442,12 @@ namespace MapPinsProject.CustomControl
             }
             return (position);
         }
+        /// <summary>
+        /// Making an http request to the Google API.
+        /// </summary>
+        /// <param name="url">The final url for the request.</param>
+        /// <param name="additionnal_URL">The parameter of the "url parameter" for the request.</param>
+        /// <returns></returns>
         private static async Task<JObject> GoogleAPIHttpRequest(string url, string additionnal_URL)
         {
             try
@@ -345,47 +490,28 @@ namespace MapPinsProject.CustomControl
         #endregion
 
         #region Camera focus definition
+        /// <summary>
+        /// Class to store data of the DistanceCalculation class's functions
+        /// </summary>
         public class CameraFocusData
         {
             public Position Position { get; set; }
             public Distance Distance { get; set; }
         }
+        /// <summary>
+        /// Method called when the CustomPins collection property is updated.
+        /// </summary>
+        /// <param name="bindable">The CustomMap object which contains the custom pins collection.</param>
+        /// <param name="oldValue">The previous value or the custom pins collection.</param>
+        /// <param name="newValue">The new value or the custom pins collection.</param>
         private static void OnCustomPinsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            CustomMap customMap = ((CustomMap)bindable);
-            Debug.WriteLine("on pass");
-            if (customMap.isMapLoaded && newValue != null)
-            {
-                if (customMap.CameraFocusParameter == CameraFocusReference.OnPins)
-                {
-                    List<double> latitudes = new List<double>();
-                    List<double> longitudes = new List<double>();
-
-                    ObservableCollection<CustomPin> pinsCollection = newValue as ObservableCollection<CustomPin>;
-                    foreach (CustomPin pin in pinsCollection)
-                    {
-                        if (pin.Location.Latitude != Double.MaxValue)
-                        {
-                            latitudes.Add(pin.Location.Latitude);
-                            longitudes.Add(pin.Location.Longitude);
-                        }
-                    }
-
-                    double lowestLat = latitudes.Min();
-                    double highestLat = latitudes.Max();
-                    double lowestLong = longitudes.Min();
-                    double highestLong = longitudes.Max();
-                    double finalLat = (lowestLat + highestLat) / 2;
-                    double finalLong = (lowestLong + highestLong) / 2;
-
-                    double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
-                    customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance * 0.7)));
-                    Debug.WriteLine("customMap.CameraFocusParameter == CameraFocusReference.OnPins");
-                }
-                Debug.WriteLine("outside");
-            }
-            Debug.WriteLine("on sort");
+            //Do whatever you want
+            //(bindable as CustomMap).UpdateCamera();
         }
+        /// <summary>
+        /// Class to calcul the distance of zoom for the camera to focus all of the lat/lng points given on the map.
+        /// </summary>
         private class DistanceCalculation
         {
             public static class GeoCodeCalc
