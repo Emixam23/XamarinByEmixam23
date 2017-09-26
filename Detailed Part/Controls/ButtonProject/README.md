@@ -39,7 +39,7 @@ Your button is made ! However, nothing will happens..
 
 I coded/developed one `Renderer` by platform, each renderer is available in Project/TARGET_PLATFORM/CustomRenderer directory.
 
-**Note :** When you're copying my code, don't forget the `[assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]` on the top of each CustomRenderer declaration. If you don't refer it in assembly, then nothing will happens !
+**Note :** When you're copying my code, don't forget the `[assembly: ExportRenderer(typeof(CustomButton), typeof(CustomButtonRenderer))]` on the top of each CustomRenderer declaration. If you don't refer it in assembly, then nothing will happens !
 
 ----
 
