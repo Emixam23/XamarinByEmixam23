@@ -4,7 +4,7 @@
 
 ----------
 
-## Controls, extensions, applications examples over Android, iOS & UWP##
+## Controls, extensions, applications examples over Android, iOS & UWP
 
 Sometimes with **[Xamarin][2]**, you're losing lot of time to search a way to make some controls, but you're losing also lot of time with NuGet packages.. Updates problems, something in the package is missing or doesn't work as you want, so that why **[XamarinByEmixam23][3]** has been  created !
 
@@ -47,7 +47,12 @@ App Examples is simply applications where some projects of the **Detailed Part**
 
 ## About ##
 
-**[XamarinByEmixam23][3]** is a project only realized by **[Maxime Guittet][5]** aka **[Emixam23][6]**, the owner of the repository. If something is missing, you can ask for it and I can realize it. However, I'm a student, which means that this **project**  isn't my priority, so I ask you to excuse myself if I take time to answer you.
+**[XamarinByEmixam23][3]** is a project only realized by **[Maxime Guittet][5]** aka **[Emixam23][6]**, the owner of the repository. 
+
+**UPDATE Oct 2018**
+Since I am not working with Xamarin at the moment, I don't put new content on this repository and I don't update the code anymore (by myself). However, I do accept any pull requestes.
+
+I know that there is many nugets existing, what do I want to provide is the source code of it in the way that it can be implemented just by copy/past the code, so you can use only what you want and customize it as much as you want :)
 
 
   [1]: http://i.stack.imgur.com/sX1VN.png
