@@ -49,7 +49,7 @@ Status:
 - [Unset] (Not even created yet)
 
 Projet | Cross | Android  | iOS | UWP |
-:-----:|:-----:|:--------:|:---:|:----:
+-------|-------|----------|-----|------
 **[CameraStreaming](https://github.com/Emixam23/POCs/tree/master/xamarin/CameraStreaming)** | WIP | WIP | WIP | WIP
 **[ExtendedButton](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ButtonProject)** | OK-UT | | |
 **[GifControl](https://github.com/Emixam23/POCs/tree/master/xamarin/GifControl)** | | | |
