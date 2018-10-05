@@ -31,11 +31,40 @@ App Examples is simply applications where some projects of the **Detailed Part**
 
 ## List of projects ##
 
-- [Button](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ButtonProject)
 - [Gif](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/GifProject)
 - [Image Circle](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ImageCircleProject)
 - **Map** => [Pins](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapPinsProject), [Polyline](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapPolylineProject), [Tiles Customization](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapTileProject), [UIOptions](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map/MapUIOptionsProject)
 - [ShapeDrawing](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ShapeDrawingProject)
+
+## UPDATE COMING UP SOON
+
+The projects tree will be reviewed and re-organised with my personal researches and development
+
+Status:
+- OK
+- OK-UT (Ok but Untested)  
+- NI (Needs Improve)
+- WIP (Work In Progress)
+- NS (Not Started)
+- [Unset] (Not even created yet)
+
+Projet | Cross | Android  | iOS | UWP |
+:-----:|:-----:|:--------:|:---:|:----:
+**[CameraStreaming](https://github.com/Emixam23/POCs/tree/master/xamarin/CameraStreaming)** | WIP | WIP | WIP | WIP
+**[ExtendedButton](https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/ButtonProject)** | OK-UT | | |
+**[GifControl](https://github.com/Emixam23/POCs/tree/master/xamarin/GifControl)** | | | |
+**[ImageCircle](https://github.com/Emixam23/POCs/tree/master/xamarin/ImageCircle)** | | | |
+**[Map][7].[3DEffect](https://github.com/Emixam23/POCs/tree/master/xamarin/Map/3DEffect)** | | | |
+**[Map][7].[Pins](https://github.com/Emixam23/POCs/tree/master/xamarin/Map/Pins)** | NI?| OK | NS | OK
+**[Map][7].[Polylines](https://github.com/Emixam23/POCs/tree/master/xamarin/Map/Polylines)** | NI? | OK | OK | OK
+**[Map][7].[Tiles](https://github.com/Emixam23/POCs/tree/master/xamarin/Map/Tiles)** | OK | OK | NI | OK
+**[Map][7].[UIControls](https://github.com/Emixam23/POCs/tree/master/xamarin/Map/UIControls)** | | | |
+**[OAuth2](https://github.com/Emixam23/POCs/tree/master/xamarin/OAuth2)** | | | |
+**[Push Notifications](https://github.com/Emixam23/POCs/tree/master/xamarin/PushNotifications)** | | | |
+**[Realm](https://github.com/Emixam23/POCs/tree/master/xamarin/Realm)** | | | |
+**[Shapes](https://github.com/Emixam23/POCs/tree/master/xamarin/Shapes)** | | | |
+**[Stripe](https://github.com/Emixam23/POCs/tree/master/xamarin/Stripe)** | | | |
+**[WebSockets](https://github.com/Emixam23/POCs/tree/master/xamarin/Websockets)** | | | |
 
 ----------
 
@@ -61,3 +90,4 @@ I know that there is many nugets existing, what do I want to provide is the sour
   [4]: https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part
   [5]: https://fr.linkedin.com/in/maxime-guittet-75834690
   [6]: https://github.com/Emixam23
+  [7]: https://github.com/Emixam23/XamarinByEmixam23/tree/master/Detailed%20Part/Controls/Map
